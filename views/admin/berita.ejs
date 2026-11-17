@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title>Kelola Berita - Media Center HST</title>
+    <link rel="icon" type="image/png" href="<%= baseUrl %>/assets/img/favicon-hst.png">
+    <link rel="stylesheet" href="<%= baseUrl %>/assets/css/admin.css?v=211">
+</head>
+<body class="admin-page" data-session-idle-at="<%= sessionIdleAt %>" data-session-max-at="<%= sessionMaxAt %>" data-session-login="<%= adminBase %>">
+<a class="skip-link" href="#admin-main">Lewati ke konten utama</a>
+
+<div class="admin-layout">
+    <%- include('../partials/sidebar') %>
+
+    <div class="admin-main">
+        <%- include('../partials/admin-topbar') %>
+
+        <main id="admin-main" class="admin-content" tabindex="-1">
+            <section class="page-heading">
+                <div>
+                    <p class="eyebrow">Konten</p>
+                    <h1>Kelola Berita</h1>
+                    <p>Kelola seluruh publikasi berita Media Center Hulu Sungai Tengah.</p>
+                </div>
+                <div class="page-heading__actions">
+                    <a class="btn" href="<%= baseUrl %>/berita" target="_blank" rel="noopener noreferrer">
+                        Lihat Publikasi
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                    </a>
+                    <a class="btn btn--primary" href="<%= adminBase %>/berita/tambah">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        Tambah Berita
+                    </a>
+                </div>
+            </section>
+
+            <% if (status) { %>
+                <div class="alert alert--success" role="status">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                    <span>
+                        <% if (status==='created') { %>Berita berhasil ditambahkan.
+                        <% } else if (status==='updated') { %>Berita berhasil diperbarui.
+                        <% } else if (status==='deleted') { %>Berita berhasil dihapus.
+                        <% } else { %>Perubahan berhasil diproses.
+                        <% } %>
+                    </span>
+                </div>
+            <% } %>
+
+            <section class="panel panel--flush">
+                <div class="toolbar">
+                    <div class="toolbar__filters">
+                        <form method="get" class="search-box" role="search">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                            <label class="sr-only" for="q">Cari berita</label>
+                            <input id="q" type="search" name="q" value="<%= q %>" maxlength="100" placeholder="Cari judul, kategori, atau penulis...">
+                        </form>
+                        <form method="get" class="filter-box" action="<%= adminBase %>/berita">
+                            <% if (q) { %><input type="hidden" name="q" value="<%= q %>"><% } %>
+                            <label class="sr-only" for="f-kategori">Filter kategori</label>
+                            <select id="f-kategori" name="kategori" class="filter-box__select">
+                                <option value="">Semua kategori</option>
+                                <% for (const k of categories) { %>
+                                    <option value="<%= k %>" <%= kategori===k?'selected':'' %>><%= k %></option>
+                                <% } %>
+                            </select>
+                            <button type="submit" class="btn btn--sm">Terapkan</button>
+                        </form>
+                    </div>
+                    <span class="toolbar__count"><strong><%= numberFormat(total) %></strong> berita ditemukan<% if (kategori) { %> dalam kategori <strong><%= kategori %></strong><% } %></span>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Berita</th>
+                                <th scope="col">Kategori</th>
+                                <th scope="col">Tanggal</th>
+                                <th scope="col">Penulis</th>
+                                <th scope="col">Diperbarui</th>
+                                <th scope="col" class="data-table__actions">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (rows.length) { %>
+                                <% for (const row of rows) { const thumb=gambarUrl(row.gambar); %>
+                                    <tr>
+                                        <td>
+                                            <div class="cell-title">
+                                                <span class="cell-title__thumb">
+                                                    <% if (thumb) { %>
+                                                        <img src="<%= thumb %>" alt="" loading="lazy" decoding="async">
+                                                    <% } else { %>
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h10l4 4v12H5z"/><path d="M15 4v5h4"/><path d="M8 13h8M8 16h6"/></svg>
+                                                    <% } %>
+                                                </span>
+                                                <span class="cell-title__text">
+                                                    <strong><%= row.judul %></strong>
+                                                    <span><%= row.slug %></span>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge"><%= row.kategori %></span></td>
+                                        <td class="cell-muted"><%= tanggalAdmin(row.tanggal) %></td>
+                                        <td class="cell-muted"><%= row.penulis||'Media Center HST' %></td>
+                                        <td class="cell-muted"><%= waktuAdmin(row.updated_at) %></td>
+                                        <td class="data-table__actions">
+                                            <div class="cell-actions">
+                                                <a class="btn btn--sm" href="<%= adminBase %>/berita/edit?id=<%= row.id %>">Edit</a>
+                                                <form method="post" action="<%= adminBase %>/berita" data-confirm="Yakin ingin menghapus berita ini? Tindakan ini tidak dapat dibatalkan.">
+                                                    <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+                                                    <input type="hidden" name="action" value="delete">
+                                                    <input type="hidden" name="id" value="<%= row.id %>">
+                                                    <button type="submit" class="btn btn--sm btn--danger">Hapus</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="empty-state empty-state--table">
+                                            <strong>Berita tidak ditemukan</strong>
+                                            <p><% if (q) { %>Coba gunakan kata kunci lain atau reset pencarian.<% } else { %>Mulai dengan menambahkan berita pertama.<% } %></p>
+                                            <% if (q) { %><a class="btn" href="<%= adminBase %>/berita">Reset Pencarian</a><% } else { %><a class="btn btn--primary" href="<%= adminBase %>/berita/tambah">Tambah Berita</a><% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <% if (totalPages>1) { %>
+                    <nav class="pagination" aria-label="Navigasi halaman">
+                        <span>Halaman <strong><%= page %></strong> dari <strong><%= totalPages %></strong></span>
+                        <div class="pagination__actions">
+                            <% if (page>1) { %>
+                                <a class="btn btn--sm" href="?<%= new URLSearchParams({...(q?{q}:{}),...(kategori?{kategori}:{}),page:String(page-1)}).toString() %>">Sebelumnya</a>
+                            <% } %>
+                            <% if (page<totalPages) { %>
+                                <a class="btn btn--sm" href="?<%= new URLSearchParams({...(q?{q}:{}),...(kategori?{kategori}:{}),page:String(page+1)}).toString() %>">Berikutnya</a>
+                            <% } %>
+                        </div>
+                    </nav>
+                <% } %>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script src="<%= baseUrl %>/assets/js/admin.js" defer></script>
+</body>
+</html>

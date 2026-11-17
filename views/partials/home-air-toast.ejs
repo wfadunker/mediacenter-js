@@ -1,0 +1,317 @@
+<%# ================================================================
+    NOTIFIKASI KUALITAS UDARA — ESTIMASI MODEL DENGAN PERHITUNGAN ISPU INDONESIA
+    Standalone; tidak memakai US AQI maupun endpoint AQI lama.
+    Sumber: Open-Meteo Air Quality / Copernicus CAMS Global.
+    Perhitungan: rata-rata 24 titik waktu per jam; PM2.5 & PM10 saja.
+    Ambang: Lampiran I Permen LHK P.14/2020.
+    Data model spasial ~45 km, BUKAN pengukuran langsung atau ISPU resmi KLH.
+    ================================================================ %>
+
+<div id="hst-env-toast" data-level="unknown" data-availability="loading">
+  <aside class="hst-env-panel" id="hst-env-panel" role="region" aria-label="Estimasi indeks pencemar udara partikulat Barabai">
+    <div class="hst-env-accent" aria-hidden="true"></div>
+
+    <header class="hst-env-head">
+      <span class="hst-env-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M2 13h16a3 3 0 1 1-3 3"/><path d="M5 18h6a2 2 0 1 1-2 2"/>
+        </svg>
+      </span>
+      <div class="hst-env-heading">
+        <span class="hst-env-eyebrow">MEDIA CENTER HST · LINGKUNGAN</span>
+        <strong>Kualitas Udara Barabai</strong>
+      </div>
+      <button type="button" class="hst-env-icon-button" data-close aria-label="Tutup informasi kualitas udara" aria-controls="hst-env-panel" title="Tutup notifikasi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </header>
+
+    <div class="hst-env-content">
+      <div class="hst-env-description">
+        <span class="hst-env-subtitle">Estimasi dari model atmosfer · 24 jam</span>
+        <span class="hst-env-freshness" data-freshness>Memuat data</span>
+      </div>
+
+      <div class="hst-env-primary">
+        <div class="hst-env-score" aria-label="Estimasi nilai subindeks ISPU tertinggi dari PM2.5 dan PM10">
+          <span class="hst-env-score-value" data-ispu aria-live="polite">—</span>
+          <span class="hst-env-score-unit">ESTIMASI ISPU PM</span>
+        </div>
+        <div class="hst-env-condition">
+          <div class="hst-env-condition-title">
+            <span class="hst-env-level-dot" aria-hidden="true"></span>
+            <strong data-status aria-live="polite">Mengambil data udara…</strong>
+          </div>
+          <p data-advice>Memeriksa data model dan rata-rata 24 jam sebelum menampilkan angka.</p>
+          <small class="hst-env-dominant" data-dominant>Parameter utama: —</small>
+        </div>
+      </div>
+
+      <div class="hst-env-metrics" aria-label="Rata-rata konsentrasi partikulat selama 24 jam">
+        <div class="hst-env-metric">
+          <span>PM2.5 <small>24 jam</small></span>
+          <strong><span data-pm25>—</span> <small>µg/m³</small></strong>
+        </div>
+        <div class="hst-env-metric">
+          <span>PM10 <small>24 jam</small></span>
+          <strong><span data-pm10>—</span> <small>µg/m³</small></strong>
+        </div>
+      </div>
+
+      <p class="hst-env-attribution">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6h.01"/></svg>
+        <span>Data model <a class="hst-env-source-link" href="https://open-meteo.com/en/docs/air-quality-api" target="_blank" rel="noopener noreferrer">Open-Meteo / CAMS Global</a> (~45 km). Konversi dua subindeks berdasarkan Permen LHK 14/2020. <b>Bukan sensor lokal, bukan ISPU resmi, dan belum mencakup seluruh polutan.</b></span>
+      </p>
+      <a class="hst-env-official-link" href="https://ispu.kemenlh.go.id/" target="_blank" rel="noopener noreferrer">Lihat pemantauan ISPU resmi KLH ↗</a>
+      <p class="hst-env-method">Estimasi rata-rata 24 jam dari grid model regional di sekitar Barabai (bukan pengamatan lokal). Untuk kondisi terukur, gunakan stasiun ISPU resmi yang lokasi dan waktunya sesuai.</p>
+    </div>
+
+    <footer class="hst-env-footer">
+      <span class="hst-env-time">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+        <span data-time>Menunggu pembaruan</span>
+      </span>
+      <button class="hst-env-update" type="button" data-refresh aria-label="Perbarui estimasi kualitas udara">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 9A7 7 0 0 1 18 7l2 5M4 12l2 5a7 7 0 0 0 11.9-2"/></svg>
+        Perbarui
+      </button>
+    </footer>
+  </aside>
+
+  <button class="hst-env-reopen" type="button" data-open hidden aria-label="Tampilkan estimasi kualitas udara" aria-controls="hst-env-panel" aria-expanded="false">
+    <span class="hst-env-reopen-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a3 3 0 1 0-3-3M2 13h16a3 3 0 1 1-3 3"/></svg></span>
+    <span>Info Udara</span><span class="hst-env-reopen-dot" aria-hidden="true"></span>
+  </button>
+</div>
+
+
+<script>
+(() => {
+  'use strict';
+
+  const root = document.getElementById('hst-env-toast');
+  if (!root || root.dataset.initialized === 'true') return;
+  root.dataset.initialized = 'true';
+
+  const panel = root.querySelector('.hst-env-panel');
+  const closeButton = root.querySelector('[data-close]');
+  const openButton = root.querySelector('[data-open]');
+  const refreshButton = root.querySelector('[data-refresh]');
+  const field = name => root.querySelector('[data-' + name + ']');
+  const write = (name, value) => {
+    const el = field(name);
+    if (el) el.textContent = String(value);
+  };
+  const formatNumber = value => Number.isFinite(value)
+    ? new Intl.NumberFormat('id-ID', { maximumFractionDigits: 1 }).format(value)
+    : '—';
+  const formatter = new Intl.DateTimeFormat('id-ID', {
+    timeZone: 'Asia/Makassar', day: '2-digit', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+
+  // Koordinat pusat Barabai (dapat diubah jika sumber lokasi demo berbeda).
+  const LAT = -2.5854;
+  const LON = 115.3846;
+
+  // Tabel lampiran I PermenLHK P.14/2020: [nilai ISPU, konsentrasi µg/m³]
+  // Semua masukan PM2.5/PM10 di sini adalah RERATA 24 JAM.
+  const BREAKPOINTS = {
+    pm25: [[0,0], [50,15.5], [100,55.4], [200,150.4], [300,250.4], [500,500]],
+    pm10: [[0,0], [50,50], [100,150], [200,350], [300,420], [500,500]]
+  };
+
+  function calculateSubIndex(value, points) {
+    if (!Number.isFinite(value) || value < 0) return null;
+    for (let i = 1; i < points.length; i++) {
+      const [iHigh, cHigh] = points[i];
+      const [iLow, cLow] = points[i - 1];
+      if (value <= cHigh) {
+        return Math.round(((iHigh - iLow) / (cHigh - cLow)) * (value - cLow) + iLow);
+      }
+    }
+    return 500; // Di luar ambang tertinggi tidak menghasilkan angka pasti; tampilkan ≥500.
+  }
+
+  function category(index) {
+    if (index <= 50) return { key:'baik', label:'Baik', advice:'Kualitas udara berdasarkan partikulat terpantau baik. Tetap perhatikan kondisi sekitar.' };
+    if (index <= 100) return { key:'sedang', label:'Sedang', advice:'Kelompok sensitif sebaiknya mengurangi aktivitas fisik luar ruangan yang terlalu lama atau berat.' };
+    if (index <= 200) return { key:'tidak-sehat', label:'Tidak Sehat', advice:'Kurangi aktivitas berat di luar ruangan, terutama bagi kelompok sensitif.' };
+    if (index <= 300) return { key:'sangat-tidak-sehat', label:'Sangat Tidak Sehat', advice:'Batasi kegiatan di luar ruangan dan perhatikan informasi kesehatan setempat.' };
+    return { key:'berbahaya', label:'Berbahaya', advice:'Hindari aktivitas luar ruangan jika memungkinkan dan ikuti arahan instansi terkait.' };
+  }
+
+  function parseWita(value) {
+    // Format Open-Meteo dengan timezone=Asia/Makassar: YYYY-MM-DDTHH:mm
+    const text = String(value || '');
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(text)) return null;
+    const time = new Date(text + ':00+08:00').getTime();
+    return Number.isFinite(time) ? time : null;
+  }
+
+  function extract24Hours(data) {
+    const hourly = data && data.hourly;
+    if (!hourly || !Array.isArray(hourly.time) ||
+        !Array.isArray(hourly.pm2_5) || !Array.isArray(hourly.pm10)) {
+      throw new Error('Data konsentrasi jam-an tidak tersedia');
+    }
+
+    // Tidak menghitung menggunakan jam masa depan.
+    // Jam terakhir yang dipakai harus sudah selesai.
+    const cutoff = Date.now() - 60 * 60 * 1000;
+    const readings = hourly.time.map((time, index) => ({
+      timestamp: parseWita(time),
+      pm25: hourly.pm2_5[index],
+      pm10: hourly.pm10[index]
+    })).filter(row => row.timestamp != null && row.timestamp <= cutoff)
+      .sort((a, b) => a.timestamp - b.timestamp);
+
+    // Gunakan 24 titik TERAKHIR yang lengkap dan kontinu; tanpa data rekaan.
+    const last = readings.slice(-24);
+    if (last.length !== 24) throw new Error('Belum ada 24 jam data');
+    for (let i = 0; i < last.length; i++) {
+      if (!Number.isFinite(last[i].pm25) || last[i].pm25 < 0 ||
+          !Number.isFinite(last[i].pm10) || last[i].pm10 < 0) {
+        throw new Error('Konsentrasi model belum lengkap');
+      }
+      if (i && last[i].timestamp - last[i-1].timestamp !== 3600000) {
+        throw new Error('Rentang waktu model tidak berurutan');
+      }
+    }
+
+    // Pastikan koordinat grid model berada cukup dekat dengan Barabai.
+    const gridLat = Number(data.latitude);
+    const gridLon = Number(data.longitude);
+    if (!Number.isFinite(gridLat) || !Number.isFinite(gridLon)) {
+      throw new Error('Koordinat grid model tidak diketahui');
+    }
+    const dLat = (gridLat - LAT) * Math.PI / 180;
+    const dLon = (gridLon - LON) * Math.PI / 180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(LAT*Math.PI/180) *
+      Math.cos(gridLat*Math.PI/180) * Math.sin(dLon/2)**2;
+    const gridKm = 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0,1-a)));
+    if (gridKm > 80) throw new Error('Grid kualitas udara terlalu jauh dari Barabai');
+
+    const pm25 = last.reduce((sum, row) => sum + row.pm25, 0) / 24;
+    const pm10 = last.reduce((sum, row) => sum + row.pm10, 0) / 24;
+    return { pm25, pm10, time: last[last.length - 1].timestamp };
+  }
+
+  function displayError() {
+    root.dataset.level = 'unknown';
+    root.dataset.availability = 'error';
+    write('freshness', 'Belum tersedia');
+    write('ispu', '—');
+    write('status', 'Data belum tersedia');
+    write('advice', 'Data konsentrasi selama 24 jam belum dapat dihitung. Silakan coba perbarui nanti.');
+    write('dominant', 'Parameter utama: —');
+    write('pm25', '—');
+    write('pm10', '—');
+    write('time', 'Belum ada data');
+  }
+
+  function render(measurement, forceStale = false) {
+    const ispu25 = calculateSubIndex(measurement.pm25, BREAKPOINTS.pm25);
+    const ispu10 = calculateSubIndex(measurement.pm10, BREAKPOINTS.pm10);
+    if (ispu25 == null || ispu10 == null) throw new Error('Subindeks tidak valid');
+
+    const index = Math.max(ispu25, ispu10);
+    const overRange = measurement.pm25 > 500 || measurement.pm10 > 500;
+    const dominant = ispu25 >= ispu10 ? 'PM2.5' : 'PM10';
+    const info = category(index);
+    const age = Date.now() - measurement.time;
+    const stale = forceStale || age > 3 * 3600000 || age < 0;
+
+    root.dataset.level = stale ? 'stale' : info.key;
+    root.dataset.availability = stale ? 'stale' : 'fresh';
+    write('freshness', stale ? 'Data lama / arsip' : 'Estimasi model');
+    write('ispu', overRange ? '≥500' : index);
+    write('status', stale ? 'Data terdahulu · ' + info.label : info.label + ' (estimasi)');
+    write('advice', stale
+      ? 'Data model ini sudah lama dan tidak mewakili keadaan saat ini.'
+      : 'Berdasarkan data model, bukan sensor lokal. ' + info.advice);
+    write('dominant', 'Parameter utama: ' + dominant);
+    write('pm25', formatNumber(measurement.pm25));
+    write('pm10', formatNumber(measurement.pm10));
+    write('time', '24 jam s.d. ' + formatter.format(new Date(measurement.time)).replace(/\./g, ':') + ' WITA');
+  }
+
+  let inflight = false;
+  let lastSuccess = null;
+  let lastCheck = 0;
+  const REFRESH_MINUTES = 20; // Cache di sisi pengguna, tidak membanjiri API.
+
+  async function refresh() {
+    if (inflight) return;
+    if (lastSuccess && Date.now() - lastCheck < 2 * 60000) {
+      // Hindari permintaan ganda saat tombol refresh ditekan berulang.
+      render(lastSuccess);
+      return;
+    }
+    inflight = true;
+    lastCheck = Date.now();
+    root.dataset.loading = 'true';
+    refreshButton.disabled = true;
+    panel.setAttribute('aria-busy', 'true');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 13000);
+
+    try {
+      const params = new URLSearchParams({
+        latitude: String(LAT), longitude: String(LON),
+        hourly: 'pm2_5,pm10', timezone: 'Asia/Makassar',
+        domains: 'cams_global', past_hours: '36', forecast_hours: '1', cell_selection: 'nearest'
+      });
+      const url = 'https://air-quality-api.open-meteo.com/v1/air-quality?' + params;
+      const response = await fetch(url, {
+        signal: controller.signal, cache: 'no-store',
+        headers: { Accept: 'application/json' }
+      });
+      if (!response.ok) throw new Error('Open-Meteo HTTP ' + response.status);
+      const data = await response.json();
+      if (data.error) throw new Error('Open-Meteo: ' + (data.reason || 'gagal'));
+      // Open-Meteo dapat memakai μ (Greek mu) atau µ (micro sign).
+      // Pastikan keduanya dibaca sebagai µg/m³, tanpa mengabaikan satuan.
+      const unitOK = unit => String(unit ?? '').trim()
+        .replace(/[µμ]/g, 'u').replace(/³/g, '3').replace(/\s/g, '').toLowerCase() === 'ug/m3';
+      if (!unitOK(data.hourly_units?.pm2_5) || !unitOK(data.hourly_units?.pm10)) {
+        throw new Error('Satuan data PM tidak sesuai µg/m³');
+      }
+      const reading = extract24Hours(data);
+      lastSuccess = reading;
+      render(reading);
+    } catch (error) {
+      console.warn('Estimasi ISPU partikulat HST:', error.message);
+      if (lastSuccess) render(lastSuccess, true);
+      else displayError();
+    } finally {
+      clearTimeout(timeout);
+      root.dataset.loading = 'false';
+      refreshButton.disabled = false;
+      panel.setAttribute('aria-busy', 'false');
+      inflight = false;
+    }
+  }
+
+  closeButton.addEventListener('click', () => {
+    panel.hidden = true;
+    openButton.hidden = false;
+    openButton.setAttribute('aria-expanded', 'false');
+    openButton.focus();
+  });
+  openButton.addEventListener('click', () => {
+    panel.hidden = false;
+    openButton.hidden = true;
+    openButton.setAttribute('aria-expanded', 'true');
+    closeButton.focus();
+  });
+  refreshButton.addEventListener('click', refresh);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && Date.now() - lastCheck > REFRESH_MINUTES * 60000) refresh();
+  });
+  refresh();
+  setInterval(() => {
+    if (!document.hidden && Date.now() - lastCheck >= REFRESH_MINUTES * 60000) refresh();
+  }, 5 * 60 * 1000);
+})();
+</script>

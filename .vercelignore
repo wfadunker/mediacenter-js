@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+data/
+*.log
+test/
+scripts/
+database/
+*.bak
+*.zip
+*.md
+PASANG-HEADER.bat
+fix-public-layout-hst.js

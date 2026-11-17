@@ -1,0 +1,150 @@
+<%
+  const errorList = Array.isArray(errors) ? errors : [];
+  const invalid = errorList.length > 0;
+  const fieldErr = {
+    judul: invalid && !data.judul,
+    isi: invalid && !data.isi,
+    kategori: invalid && !data.kategori,
+    tanggal: invalid && !/^\d{4}-\d{2}-\d{2}$/.test(String(data.tanggal || ''))
+  };
+  const describe = (id, text) => `${id}-help${fieldErr[id] ? ' ' + id + '-error' : ''}`;
+  const fotoSekarang = isEdit ? gambarUrl(data.gambar) : '';
+%>
+<% if (errorList.length) { %>
+  <div class="alert alert--error" role="alert">
+    <span aria-hidden="true">!</span>
+    <div>
+      <strong>Data belum dapat disimpan.</strong>
+      <ul>
+        <% for (const message of errorList) { %><li><%= message %></li><% } %>
+      </ul>
+    </div>
+  </div>
+<% } %>
+
+<form method="post" enctype="multipart/form-data" class="form-layout" novalidate>
+  <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+
+  <div class="form-stack">
+    <section class="panel" aria-labelledby="isi-title">
+      <div class="form-card-head">
+        <h2 id="isi-title">Isi berita</h2>
+        <p>Masukkan judul dan isi informasi yang akan ditampilkan kepada masyarakat.</p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="judul">Judul berita<span class="required" aria-hidden="true">*</span><span class="sr-only"> (wajib)</span></label>
+        <input id="judul" class="input" type="text" name="judul" value="<%= data.judul %>" maxlength="255" required
+               placeholder="Masukkan judul berita"
+               aria-describedby="<%= describe('judul') %>"
+               <%= fieldErr.judul ? 'aria-invalid="true"' : '' %>
+               <% if (!isEdit) { %>autofocus<% } %>>
+        <% if (fieldErr.judul) { %><p class="error-text" id="judul-error">Judul wajib diisi.</p><% } %>
+        <p class="help" id="judul-help">Gunakan judul yang jelas dan sesuai dengan isi berita.</p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="isi">Isi berita<span class="required" aria-hidden="true">*</span><span class="sr-only"> (wajib)</span></label>
+        <textarea id="isi" class="textarea" name="isi" rows="12" required
+                  placeholder="Tuliskan isi berita…"
+                  aria-describedby="<%= describe('isi') %>"
+                  <%= fieldErr.isi ? 'aria-invalid="true"' : '' %>><%= data.isi %></textarea>
+        <% if (fieldErr.isi) { %><p class="error-text" id="isi-error">Isi berita wajib diisi.</p><% } %>
+        <p class="help" id="isi-help">Tekan Enter untuk membuat paragraf baru.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="info-title">
+      <div class="form-card-head">
+        <h2 id="info-title">Informasi publikasi</h2>
+        <p>Lengkapi informasi pendukung untuk publikasi berita.</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label class="label" for="kategori">Kategori<span class="required" aria-hidden="true">*</span><span class="sr-only"> (wajib)</span></label>
+          <input id="kategori" class="input" type="text" name="kategori" list="kategori-list" value="<%= data.kategori %>" maxlength="100" required
+                 aria-describedby="<%= describe('kategori') %>"
+                 <%= fieldErr.kategori ? 'aria-invalid="true"' : '' %>>
+          <datalist id="kategori-list">
+            <% for (const option of ['Pemerintahan','Pelayanan Publik','Pendidikan','Sosial','Keagamaan','Informasi','Komunikasi','Teknologi','Agenda']) { %>
+              <option value="<%= option %>"></option>
+            <% } %>
+          </datalist>
+          <% if (fieldErr.kategori) { %><p class="error-text" id="kategori-error">Kategori wajib diisi.</p><% } %>
+          <p class="help" id="kategori-help">Pilih dari saran atau ketik kategori baru.</p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="tanggal">Tanggal publikasi<span class="required" aria-hidden="true">*</span><span class="sr-only"> (wajib)</span></label>
+          <input id="tanggal" class="input" type="date" name="tanggal" value="<%= data.tanggal %>" required
+                 aria-describedby="<%= describe('tanggal') %>"
+                 <%= fieldErr.tanggal ? 'aria-invalid="true"' : '' %>>
+          <% if (fieldErr.tanggal) { %><p class="error-text" id="tanggal-error">Tanggal publikasi tidak valid.</p><% } %>
+          <p class="help" id="tanggal-help">Zona waktu: WITA.</p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="penulis">Penulis</label>
+          <input id="penulis" class="input" type="text" name="penulis" value="<%= data.penulis %>" maxlength="150">
+        </div>
+
+        <div class="field">
+          <label class="label" for="sumber">Sumber</label>
+          <input id="sumber" class="input" type="text" name="sumber" value="<%= data.sumber %>" maxlength="255">
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="form-aside" aria-label="Gambar dan publikasi">
+    <section class="panel" aria-labelledby="gambar-title">
+      <div class="form-card-head">
+        <h2 id="gambar-title">Gambar berita</h2>
+        <p>Gambar utama yang sesuai dengan berita.</p>
+      </div>
+
+      <div class="preview" id="preview-box">
+        <% if (fotoSekarang) { %>
+          <img src="<%= fotoSekarang %>" alt="Gambar saat ini: <%= data.judul %>">
+        <% } else { %>
+          <img alt="Pratinjau gambar yang dipilih" hidden>
+          <span data-preview-empty>Belum ada gambar</span>
+        <% } %>
+      </div>
+
+      <div class="file-drop" style="margin-top:.9rem">
+        <label class="label" for="gambar"><%= isEdit ? 'Ganti gambar' : 'Unggah gambar' %></label>
+        <input id="gambar" type="file" name="gambar" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" data-preview-input="#preview-box" aria-describedby="gambar-help">
+        <p class="help" id="gambar-help">JPG, PNG, atau WebP. Maksimal 2 MB.<%= isEdit ? ' Kosongkan jika gambar tidak ingin diganti.' : '' %></p>
+      </div>
+
+      <% if (isEdit && data.gambar) { %>
+        <label class="check" style="margin-top:.75rem">
+          <input type="checkbox" name="hapus_gambar" value="1">
+          <span>Hapus gambar saat disimpan</span>
+        </label>
+      <% } %>
+    </section>
+
+    <section class="panel" aria-labelledby="publikasi-title">
+      <div class="form-card-head">
+        <h2 id="publikasi-title"><%= isEdit ? 'Informasi berita' : 'Publikasi' %></h2>
+        <p><%= isEdit ? 'Data teknis berita ini.' : 'Periksa kembali informasi sebelum berita dipublikasikan.' %></p>
+      </div>
+
+      <% if (isEdit) { %>
+        <div class="meta-row"><span>ID</span><strong>#<%= data.id %></strong></div>
+        <div class="meta-row"><span>Slug</span><strong><%= data.slug %></strong></div>
+        <div class="meta-row"><span>Terakhir diubah</span><strong><%= waktuAdmin(data.updated_at) %></strong></div>
+      <% } else { %>
+        <div class="meta-row"><span>Status</span><strong class="badge badge--accent">Baru</strong></div>
+        <div class="meta-row"><span>Zona waktu</span><strong>WITA</strong></div>
+      <% } %>
+
+      <div style="margin-top:1rem">
+        <button type="submit" class="btn btn--primary btn--block"><%= isEdit ? 'Simpan perubahan' : 'Publikasikan berita' %></button>
+      </div>
+    </section>
+  </aside>
+</form>

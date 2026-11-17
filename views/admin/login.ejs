@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title>Masuk Administrator - Media Center HST</title>
+    <link rel="icon" type="image/png" href="<%= baseUrl %>/assets/img/favicon-hst.png">
+    <link rel="stylesheet" href="<%= baseUrl %>/assets/css/admin.css?v=211">
+</head>
+<body class="auth-page">
+<a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+<main id="main-content" class="auth">
+    <section class="auth__brand" aria-label="Media Center Kabupaten Hulu Sungai Tengah">
+        <div class="auth__brand-inner">
+            <a class="auth__logo" href="<%= baseUrl %>/" aria-label="Kembali ke website publik">
+                <img src="<%= baseUrl %>/assets/img/logo-hst.png" alt="Logo Kabupaten Hulu Sungai Tengah" width="52" height="63">
+                <span>
+                    <span>Pemerintah Kabupaten</span>
+                    <strong>Hulu Sungai Tengah</strong>
+                </span>
+            </a>
+
+            <div class="auth__brand-copy">
+                <h1>Kelola berita dan informasi resmi Media Center HST.</h1>
+                <p>Satu tempat untuk menerbitkan berita, agenda, dan pelayanan informasi publik Pemerintah Kabupaten Hulu Sungai Tengah.</p>
+            </div>
+
+        
+
+            <p class="auth__brand-foot">Media Center Kabupaten Hulu Sungai Tengah</p>
+        </div>
+    </section>
+
+    <section class="auth__panel">
+        <div class="auth__card">
+            <a class="auth__mobile-logo" href="<%= baseUrl %>/" aria-label="Kembali ke website publik">
+                <img src="<%= baseUrl %>/assets/img/logo-hst.png" alt="Logo Kabupaten Hulu Sungai Tengah" width="34" height="41">
+                <span>Media Center HST</span>
+            </a>
+
+            <div class="auth__head">
+                <h2>Masuk ke Dashboard</h2>
+                <p>Gunakan akun administrator untuk melanjutkan. Setelah keluar atau sesi berakhir, Anda harus masuk kembali.</p>
+            </div>
+
+            <% if (notice) { %>
+                <div class="alert alert--info" role="status">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+                    <span><%= notice %></span>
+                </div>
+            <% } %>
+
+            <% if (error) { %>
+                <div class="alert alert--error" role="alert">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+                    <span><%= error %></span>
+                </div>
+            <% } %>
+
+            <form method="post" action="<%= adminBase %>" class="auth-form" data-login-form>
+                <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+
+                <div class="field">
+                    <label class="field__label" for="username">Username</label>
+                    <div class="input-wrap">
+                        <svg class="input-wrap__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-3.5 3.5-5 7-5s6 1.5 7 5"/></svg>
+                        <input id="username" type="text" name="username" required autofocus maxlength="100" autocomplete="username" spellcheck="false" placeholder="Masukkan username">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="field__label" for="password">Password</label>
+                    <div class="input-wrap">
+                        <svg class="input-wrap__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                        <input id="password" type="password" name="password" required maxlength="128" autocomplete="current-password" placeholder="Masukkan password" data-password-input>
+                        <button type="button" class="password-toggle" data-password-toggle aria-label="Tampilkan password" aria-pressed="false">
+                            <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 6.2A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.1 3.9"/><path d="M6.2 6.2C3.5 8 2 12 2 12s3.5 7 10 7a10 10 0 0 0 4.1-.9"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="caps-warning" data-capslock hidden>Huruf besar sedang aktif.</p>
+
+                <button type="submit" class="btn btn--primary btn--block auth-submit" data-submit>
+                    Masuk
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+                </button>
+            </form>
+
+            <div class="auth__foot">
+                <a href="<%= baseUrl %>/" class="auth__back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+                    Kembali ke website
+                </a>
+                <span>Setelah 30 menit tidak aktif, sesi berakhir otomatis dan Anda diminta masuk kembali.</span>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="<%= baseUrl %>/assets/js/admin.js" defer></script>
+</body>
+</html>

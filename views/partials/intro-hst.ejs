@@ -1,0 +1,341 @@
+<!--
+  INTRO BERANDA PUBLIK — MEDIA CENTER KABUPATEN HST
+  Tampil saat kunjungan pertama atau refresh Beranda; tidak saat klik Beranda/Back.
+  Menggunakan sessionStorage hanya sebagai penanda navigasi tab; tanpa perubahan server.js.
+  Pasang SATU KALI di header EJS publik, sesudah <body>.
+  Aset: /assets/video/intro-hst.mp4
+        /assets/img/intro-hst-poster.jpg
+        /assets/img/logo-hst.png (wajib logo resmi kabupaten)
+-->
+<section id="hst-intro" class="hst-intro" data-base="<%= baseUrl %>"
+  role="dialog" aria-modal="true" aria-labelledby="hst-intro-heading"
+  aria-describedby="hst-intro-desc" hidden>
+
+  <video class="hst-intro__video" muted playsinline preload="none"
+    aria-hidden="true">
+    <source src="<%= baseUrl %>/assets/video/intro-hst.mp4" type="video/mp4">
+  </video>
+  <div class="hst-intro__overlay" aria-hidden="true"></div>
+
+  <div class="hst-intro__layout">
+    <header class="hst-intro__header">
+      <div class="hst-intro__brand" aria-label="Media Center HST">
+        <span class="hst-intro__brand-mark" aria-hidden="true"></span>
+        <span><strong>MEDIA CENTER</strong><small>HULU SUNGAI TENGAH</small></span>
+      </div>
+      <button type="button" class="hst-intro__skip" data-hst-close>
+        Lewati intro <span aria-hidden="true">↗</span>
+      </button>
+    </header>
+
+    <div class="hst-intro__main">
+      <div class="hst-intro__emblem">
+        <img src="<%= baseUrl %>/assets/img/logo-hst.png"
+          alt="Lambang Kabupaten Hulu Sungai Tengah" width="76" height="76">
+      </div>
+      <p class="hst-intro__eyebrow">PORTAL INFORMASI PEMERINTAH DAERAH</p>
+      <h1 id="hst-intro-heading">Pemerintah Kabupaten<br><span>Hulu Sungai Tengah</span></h1>
+      <p id="hst-intro-desc" class="hst-intro__lead">
+        Informasi, publikasi, dan kabar pembangunan daerah<br class="hst-intro__desktop-break">
+        dalam satu layanan Media Center.
+      </p>
+      <button type="button" class="hst-intro__enter" data-hst-close>
+        Jelajahi Beranda
+        <span class="hst-intro__enter-icon" aria-hidden="true">→</span>
+      </button>
+    </div>
+
+    <footer class="hst-intro__footer">
+      <span>KALIMANTAN SELATAN <span aria-hidden="true">•</span> BUMI MURAKATA</span>
+      <span>MEDIA CENTER HST</span>
+    </footer>
+  </div>
+
+  <div class="hst-intro__progress" aria-hidden="true"><span></span></div>
+</section>
+
+<style>
+/* Seluruh aturan dibatasi ke #hst-intro agar tidak mengubah beranda/admin. */
+body.hst-intro-locked { overflow: hidden !important; }
+#hst-intro, #hst-intro * { box-sizing: border-box; }
+#hst-intro[hidden] { display: none !important; }
+#hst-intro {
+  --hst-navy: #0B2E4F;
+  --hst-blue: #1F6FA8;
+  position: fixed; inset: 0; z-index: 2147483000; isolation: isolate;
+  background: #0b2e4f; color: #fff;
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  overflow: auto; opacity: 1; visibility: visible;
+  transition: opacity .5s ease, visibility .5s ease;
+}
+#hst-intro.hst-intro--closing { opacity: 0; visibility: hidden; pointer-events: none; }
+#hst-intro .hst-intro__video,
+#hst-intro .hst-intro__overlay {
+  position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none;
+}
+#hst-intro .hst-intro__video { z-index: -2; object-fit: cover; object-position: center; }
+#hst-intro .hst-intro__overlay {
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(4,25,46,.73) 0%, rgba(6,32,58,.62) 42%, rgba(3,24,44,.85) 100%),
+              linear-gradient(90deg, rgba(3,22,39,.45), transparent 55%, rgba(3,22,39,.30));
+}
+#hst-intro .hst-intro__layout {
+  width: 100%; max-width: 1700px; min-height: 100vh; min-height: 100dvh;
+  margin: 0 auto; padding: clamp(24px, 3vw, 42px) clamp(22px, 5vw, 78px) 31px;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+}
+#hst-intro .hst-intro__header,
+#hst-intro .hst-intro__footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px;
+}
+#hst-intro .hst-intro__brand { display: flex; align-items: center; gap: 12px; text-align: left; }
+#hst-intro .hst-intro__brand-mark {
+  display: block; width: 3px; height: 33px; background: #a4d8fb; border-radius: 8px;
+}
+#hst-intro .hst-intro__brand strong,
+#hst-intro .hst-intro__brand small { display: block; }
+#hst-intro .hst-intro__brand strong {
+  font-size: 13px; letter-spacing: .18em; font-weight: 750; line-height: 1.4;
+}
+#hst-intro .hst-intro__brand small {
+  margin-top: 2px; font-size: 9px; letter-spacing: .11em; color: #c9ddec; font-weight: 650;
+}
+#hst-intro button { font-family: inherit; cursor: pointer; }
+#hst-intro .hst-intro__skip {
+  display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,.24);
+  border-radius: 100px; background: rgba(255,255,255,.08); color: #fff;
+  padding: 10px 15px; font-size: 12px; font-weight: 600;
+  transition: background .2s ease, border-color .2s ease;
+}
+#hst-intro .hst-intro__skip:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.48); }
+#hst-intro .hst-intro__skip span { font-size: 15px; }
+#hst-intro .hst-intro__main {
+  width: min(100%, 960px); margin: auto; padding: 52px 0 64px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+#hst-intro .hst-intro__emblem {
+  width: 102px; height: 102px; padding: 14px; background: rgba(255,255,255,.97);
+  display: grid; place-items: center; border-radius: 19px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.2);
+  animation: hstIntroFadeIn .72s ease both;
+}
+#hst-intro .hst-intro__emblem img { display: block; width: 100%; height: 100%; object-fit: contain; }
+#hst-intro .hst-intro__eyebrow {
+  margin: 31px 0 12px; color: #c6e5fa; font-size: 10px;
+  font-weight: 750; letter-spacing: .25em; line-height: 1.6;
+  animation: hstIntroFadeIn .7s .12s both;
+}
+#hst-intro h1 {
+  margin: 0; color: #fff; font-size: clamp(31px, 4.6vw, 62px);
+  line-height: 1.16; letter-spacing: -.035em; font-weight: 780;
+  text-wrap: balance; text-shadow: 0 4px 25px rgba(0,0,0,.18);
+  animation: hstIntroFadeIn .76s .23s both;
+}
+#hst-intro h1 span { color: #dbf0ff; }
+#hst-intro .hst-intro__lead {
+  margin: 20px 0 0; color: #e3eef8;
+  font-size: clamp(13px, 1.2vw, 15px); line-height: 1.75;
+  animation: hstIntroFadeIn .75s .33s both;
+}
+#hst-intro .hst-intro__enter {
+  margin-top: 30px; padding: 0 12px 0 22px; min-height: 49px;
+  display: inline-flex; align-items: center; gap: 30px;
+  border: 1px solid #fff; border-radius: 10px;
+  background: #fff; color: var(--hst-navy);
+  font-size: 13px; font-weight: 750;
+  box-shadow: 0 12px 38px rgba(0,0,0,.18);
+  transition: transform .2s ease, background .2s ease;
+  animation: hstIntroFadeIn .75s .44s both;
+}
+#hst-intro .hst-intro__enter:hover { transform: translateY(-2px); background: #e9f5ff; }
+#hst-intro .hst-intro__enter-icon {
+  width: 31px; height: 31px; border-radius: 7px;
+  display: grid; place-items: center;
+  background: #eaf3fa; color: var(--hst-blue); font-size: 19px; font-weight: 500;
+}
+#hst-intro .hst-intro__footer {
+  font-size: 10px; letter-spacing: .13em; font-weight: 650; color: #cfdeec;
+}
+#hst-intro .hst-intro__progress {
+  position: fixed; bottom: 0; left: 0; width: 100%; height: 3px;
+  background: rgba(255,255,255,.18); overflow: hidden;
+}
+#hst-intro .hst-intro__progress span {
+  display: block; width: 100%; height: 100%; background: #9ad3f6;
+  transform-origin: left center; transform: scaleX(var(--hst-progress, 0));
+  transition: transform .12s linear;
+}
+#hst-intro button:focus-visible { outline: 3px solid #a7dfff; outline-offset: 4px; }
+@keyframes hstIntroFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 640px) {
+  #hst-intro .hst-intro__layout { padding: 20px 20px 25px; }
+  #hst-intro .hst-intro__brand strong { font-size: 11px; letter-spacing: .10em; }
+  #hst-intro .hst-intro__brand small { font-size: 8px; letter-spacing: .04em; }
+  #hst-intro .hst-intro__skip { font-size: 11px; padding: 8px 10px; }
+  #hst-intro .hst-intro__main { padding: 30px 0 42px; }
+  #hst-intro .hst-intro__emblem { width: 87px; height: 87px; border-radius: 16px; }
+  #hst-intro .hst-intro__eyebrow { font-size: 9px; letter-spacing: .12em; margin-top: 25px; }
+  #hst-intro h1 { font-size: clamp(28px, 7.2vw, 39px); }
+  #hst-intro .hst-intro__lead { font-size: 12px; margin-top: 17px; }
+  #hst-intro .hst-intro__desktop-break { display: none; }
+  #hst-intro .hst-intro__footer { justify-content: center; font-size: 9px; }
+  #hst-intro .hst-intro__footer > :last-child { display: none; }
+}
+@media (max-height: 630px) and (min-width: 641px) {
+  #hst-intro .hst-intro__main { padding: 18px 0; }
+  #hst-intro .hst-intro__emblem { width: 70px; height: 70px; }
+  #hst-intro .hst-intro__eyebrow { margin-top: 15px; }
+  #hst-intro .hst-intro__lead { margin-top: 12px; }
+  #hst-intro .hst-intro__enter { margin-top: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hst-intro, #hst-intro * { animation: none !important; transition: none !important; }
+}
+</style>
+
+<script>
+(() => {
+  'use strict';
+
+  const intro = document.getElementById('hst-intro');
+  if (!intro) return;
+
+  // Intro hanya ada pada layout PUBLIK, tidak pernah dipasang di admin.
+  // Navigasi internal / tombol Kembali tidak boleh mengulang intro.
+  const base = String(intro.dataset.base || '').replace(/\/+$/, '');
+  const pathname = location.pathname.replace(/\/+$/, '');
+  const homepagePaths = new Set([
+    base, base + '/beranda', base + '/index', base + '/index.php'
+  ]);
+
+  const VISITED_KEY = 'hst:public:visited:v1';
+  let hasVisited = false;
+  try {
+    hasVisited = sessionStorage.getItem(VISITED_KEY) === '1';
+    // Tandai kunjungan bahkan saat pertama membuka halaman Berita/Tentang.
+    sessionStorage.setItem(VISITED_KEY, '1');
+  } catch (_) {
+    // Tetap aman bila penyimpanan browser dinonaktifkan.
+  }
+
+  if (!homepagePaths.has(pathname)) return;
+
+  const navigation = performance.getEntriesByType('navigation')[0];
+  const navigationType = navigation && navigation.type || 'navigate';
+  const isReload = navigationType === 'reload';
+  const isBackOrForward = navigationType === 'back_forward';
+  const forcePreview = new URLSearchParams(location.search).get('intro') === '1';
+
+  let fromOwnWebsite = false;
+  try {
+    const previous = new URL(document.referrer);
+    fromOwnWebsite = previous.origin === location.origin;
+  } catch (_) {
+    // Saat masuk dari bookmark / URL langsung, referrer bisa kosong.
+  }
+
+  // Aturan:
+  // - Masuk pertama kali: TAMPIL
+  // - Refresh (F5/Ctrl+R) di Beranda: TAMPIL
+  // - Klik menu Beranda dari halaman lain: LEWATI
+  // - Tombol Back/Forward: LEWATI
+  // - ?intro=1: paksa tampil untuk keperluan pratinjau
+  const shouldShow = forcePreview || isReload || (
+    !isBackOrForward && !hasVisited && !fromOwnWebsite
+  );
+  if (!shouldShow) return;
+
+  const video = intro.querySelector('video');
+  const closeButtons = [...intro.querySelectorAll('[data-hst-close]')];
+  const mainButton = intro.querySelector('.hst-intro__enter');
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let closed = false;
+  let safetyTimer;
+  let restoreTimer;
+
+  function hideNow() {
+    intro.hidden = true;
+    document.body.classList.remove('hst-intro-locked');
+    clearTimeout(restoreTimer);
+  }
+
+  function closeIntro() {
+    if (closed) return;
+    closed = true;
+    clearTimeout(safetyTimer);
+    if (video) video.pause();
+    intro.classList.add('hst-intro--closing');
+    document.body.classList.remove('hst-intro-locked');
+
+    function hide() {
+      if (intro.hidden) return;
+      hideNow();
+      const main = document.querySelector('main');
+      if (main) {
+        if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+        main.focus({ preventScroll: true });
+      }
+    }
+
+    intro.addEventListener('transitionend', event => {
+      if (event.target === intro && event.propertyName === 'opacity') hide();
+    }, { once: true });
+    restoreTimer = setTimeout(hide, reduceMotion ? 0 : 650);
+  }
+
+  intro.hidden = false;
+  document.body.classList.add('hst-intro-locked');
+  closeButtons.forEach(button => button.addEventListener('click', closeIntro));
+
+  intro.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeIntro();
+    }
+    if (event.key !== 'Tab' || closeButtons.length < 2) return;
+    const first = closeButtons[0];
+    const last = closeButtons[closeButtons.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  // Saat halaman dipulihkan dari cache tombol Back, langsung sembunyikan intro.
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) {
+      closed = true;
+      clearTimeout(safetyTimer);
+      if (video) video.pause();
+      hideNow();
+    }
+  });
+
+  safetyTimer = setTimeout(closeIntro, reduceMotion ? 2600 : 7000);
+  if (video && !reduceMotion) {
+    video.muted = true;
+    video.addEventListener('timeupdate', () => {
+      if (Number.isFinite(video.duration) && video.duration > 0) {
+        intro.style.setProperty('--hst-progress',
+          String(Math.min(1, video.currentTime / video.duration)));
+      }
+    });
+    video.addEventListener('ended', () => setTimeout(closeIntro, 360), { once: true });
+    video.addEventListener('error', () => setTimeout(closeIntro, 2400), { once: true });
+    const playback = video.play();
+    if (playback && typeof playback.catch === 'function') {
+      playback.catch(() => setTimeout(closeIntro, 2700));
+    }
+  }
+  if (mainButton) mainButton.focus({ preventScroll: true });
+})();
+</script>

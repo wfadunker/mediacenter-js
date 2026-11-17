@@ -1,0 +1,496 @@
+<%- include('../partials/header') %>
+<%- include('../partials/public-navbar') %>
+
+
+
+<!-- =========================================================
+     NEWS PAGE
+========================================================= -->
+
+<main id="main-content" tabindex="-1" class="gov-news">
+
+
+    <!-- =====================================================
+         PAGE HERO
+    ====================================================== -->
+
+    <section class="gov-news-hero">
+
+        <div class="gov-news-shell">
+
+
+            <nav
+                class="mc-breadcrumb"
+                aria-label="Breadcrumb"
+            >
+
+                <a href="/mediacenter-demo/">
+                    Beranda
+                </a>
+
+                <span aria-hidden="true">
+                    /
+                </span>
+
+                <span aria-current="page">
+                    Berita
+                </span>
+
+            </nav>
+
+
+            <div class="gov-news-hero-grid">
+
+
+                <div class="gov-news-hero-content">
+
+
+                    <p class="gov-news-kicker">
+                        Pusat Informasi Publik
+                    </p>
+
+
+                    <h1>
+                        Berita dan Informasi Daerah
+                    </h1>
+
+
+                    <p>
+
+                        Telusuri publikasi resmi
+                        Pemerintah Kabupaten Hulu Sungai Tengah
+                        berdasarkan kata kunci, kategori,
+                        tahun, dan waktu penerbitan.
+
+                    </p>
+
+
+                </div>
+
+
+                <aside class="mc-news-stats" aria-label="Ringkasan arsip berita">
+
+                    <div>
+                        <strong><%= totalBerita %></strong>
+                        <span>Publikasi</span>
+                    </div>
+
+                    <div>
+                        <strong><%= categories.length %></strong>
+                        <span>Kategori</span>
+                    </div>
+
+                    <div>
+                        <strong><%= archiveYears.length %></strong>
+                        <span>Tahun arsip</span>
+                    </div>
+
+                </aside>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+
+    <!-- =====================================================
+         RESULTS
+    ====================================================== -->
+
+    <section class="gov-news-results">
+
+        <div class="gov-news-shell">
+
+
+            <header class="gov-news-results-head">
+
+
+                <div>
+
+                    <p class="gov-news-kicker">
+                        Publikasi Pemerintah
+                    </p>
+
+
+                    <h2>
+
+                        Arsip Berita
+
+                    </h2>
+
+                </div>
+
+
+
+                <p
+                    class="gov-news-result-count"
+                    aria-live="polite"
+                >
+
+                    <% if (totalBerita>0) { %>
+
+                        Menampilkan
+                        <strong>
+                            <%= start %>–<%= end %>
+                        </strong>
+                        dari
+                        <strong>
+                            <%= totalBerita %>
+                        </strong>
+                        informasi
+
+                    <% } else { %>
+
+                        0 informasi ditemukan
+
+                    <% } %>
+
+                </p>
+
+
+            </header>
+
+
+
+            <% if (newsRows.length) { %>
+
+
+                <div class="gov-news-grid">
+
+
+                    <% for (const row of newsRows) { %>
+
+
+                        <% const url=detailUrl(row.slug),img=gambarUrl(row.gambar) %>
+
+
+                        <article class="gov-news-card">
+
+
+                            <!-- IMAGE -->
+
+                            <a
+                                href="<%= url %>"
+                                class="gov-news-card-media"
+                                aria-label="<%= row.judul %>"
+                            >
+
+
+                                <% if (img) { %>
+
+                                    <img
+                                        src="<%= img %>"
+                                        alt="<%= row.judul %>"
+                                        width="720"
+                                        height="450"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+
+                                <% } else { %>
+
+                                    <%- placeholderNews %>
+
+                                <% } %>
+
+
+                            </a>
+
+
+
+                            <!-- BODY -->
+
+                            <div class="gov-news-card-body">
+
+
+                                <div class="gov-news-meta">
+
+
+                                    <% if (row.kategori) { %>
+
+                                        <span>
+                                            <%= row.kategori %>
+                                        </span>
+
+                                    <% } %>
+
+
+                                    <time
+                                        datetime="<%= dateSql(row.tanggal) %>"
+                                    >
+                                        <%= tanggalBerita(row.tanggal) %>
+                                    </time>
+
+
+                                </div>
+
+
+                                <h2>
+
+                                    <a
+                                        href="<%= url %>"
+                                    >
+                                        <%= row.judul %>
+                                    </a>
+
+                                </h2>
+
+
+                                <p>
+
+                                    <%= excerpt(row.isi,170) %>
+
+                                </p>
+
+
+                                <a
+                                    href="<%= url %>"
+                                    class="gov-news-card-link"
+                                >
+                                    Baca informasi
+
+                                    <span aria-hidden="true">
+                                        →
+                                    </span>
+                                </a>
+
+
+                            </div>
+
+
+                        </article>
+
+
+                    <% } %>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PAGINATION
+                ================================================== -->
+
+                <% if (totalPages>1) { %>
+
+
+                    <% const firstPage=Math.max(1,page-2),lastPage=Math.min(totalPages,page+2) %>
+
+
+                    <nav
+                        class="gov-news-pagination"
+                        aria-label="Navigasi halaman berita"
+                    >
+
+
+                        <!-- PREVIOUS -->
+
+                        <% if (page>1) { %>
+
+                            <a
+                                href="<%= pageUrl(page-1,q,kategori,tahun,urut) %>"
+                                class="gov-news-page-nav"
+                                rel="prev"
+                            >
+                                <span aria-hidden="true">
+                                    ←
+                                </span>
+
+                                Sebelumnya
+                            </a>
+
+                        <% } else { %>
+
+                            <span
+                                class="gov-news-page-nav is-disabled"
+                                aria-disabled="true"
+                            >
+                                <span aria-hidden="true">
+                                    ←
+                                </span>
+
+                                Sebelumnya
+                            </span>
+
+                        <% } %>
+
+
+
+                        <!-- NUMBERS -->
+
+                        <div class="gov-news-pages">
+
+
+                            <% if (firstPage>1) { %>
+
+                                <a
+                                    href="<%= pageUrl(1,q,kategori,tahun,urut) %>"
+                                >
+                                    1
+                                </a>
+
+
+                                <% if (firstPage>2) { %>
+
+                                    <span>
+                                        …
+                                    </span>
+
+                                <% } %>
+
+                            <% } %>
+
+
+
+                            <% for (let i=firstPage;i<=lastPage;i++){ %>
+
+                                <a
+                                    href="<%= pageUrl(i,q,kategori,tahun,urut) %>"
+                                    class="<%= i===page?'is-active':'' %>"
+                                    <%= i===page?'aria-current="page"':'' %>
+                                >
+                                    <%= i %>
+                                </a>
+
+                            <% } %>
+
+
+
+                            <% if (lastPage<totalPages) { %>
+
+                                <% if (lastPage<totalPages-1) { %>
+
+                                    <span>
+                                        …
+                                    </span>
+
+                                <% } %>
+
+
+                                <a
+                                    href="<%= pageUrl(totalPages,q,kategori,tahun,urut) %>"
+                                >
+                                    <%= totalPages %>
+                                </a>
+
+                            <% } %>
+
+
+                        </div>
+
+
+
+                        <!-- NEXT -->
+
+                        <% if (page<totalPages) { %>
+
+                            <a
+                                href="<%= pageUrl(page+1,q,kategori,tahun,urut) %>"
+                                class="gov-news-page-nav"
+                                rel="next"
+                            >
+                                Berikutnya
+
+                                <span aria-hidden="true">
+                                    →
+                                </span>
+                            </a>
+
+                        <% } else { %>
+
+                            <span
+                                class="gov-news-page-nav is-disabled"
+                                aria-disabled="true"
+                            >
+                                Berikutnya
+
+                                <span aria-hidden="true">
+                                    →
+                                </span>
+                            </span>
+
+                        <% } %>
+
+
+                    </nav>
+
+
+                <% } %>
+
+
+            <% } else { %>
+
+
+                <!-- =================================================
+                     EMPTY RESULT
+                ================================================== -->
+
+                <div class="gov-news-empty">
+
+
+                    <div class="gov-news-empty-icon">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                            aria-hidden="true"
+                        >
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="7"
+                            />
+
+                            <path
+                                d="m20 20-4-4"
+                            />
+                        </svg>
+
+                    </div>
+
+
+                    <h2>
+                        Informasi tidak ditemukan
+                    </h2>
+
+
+                    <p>
+
+                        Tidak ada berita yang sesuai
+                        dengan kata kunci atau filter
+                        yang dipilih. Coba gunakan
+                        pencarian yang lebih umum.
+
+                    </p>
+
+
+                    <a
+                        href="/mediacenter-demo/berita"
+                        class="mc-btn-primary"
+                    >
+                        Lihat Semua Berita
+                    </a>
+
+
+                </div>
+
+
+            <% } %>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<%- include('../partials/footer') %>

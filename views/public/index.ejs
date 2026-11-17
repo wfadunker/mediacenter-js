@@ -1,0 +1,645 @@
+<%- include('../partials/header') %>
+<%- include('../partials/public-navbar') %>
+<%- include('../partials/public-banner') %>
+
+<%
+  const homePortalUrl = typeof portalUrl === 'string' && portalUrl ? portalUrl : 'https://www.hstkab.go.id/';
+%>
+
+
+
+<!-- =========================================================
+     HOME
+========================================================= -->
+<main id="main-content" tabindex="-1" class="gov-home">
+
+
+    <!-- =====================================================
+         INTRO
+    ====================================================== -->
+
+    <section class="gov-home-intro">
+
+        <div class="gov-home-shell">
+
+            <div class="mc-hero">
+
+
+                <div class="mc-hero__copy">
+
+                    <p class="gov-home-kicker">
+                        Kanal Informasi Pemerintah Daerah
+                    </p>
+
+
+                    <h1>
+                        Informasi Hulu Sungai Tengah
+                        dalam satu kanal resmi
+                    </h1>
+
+
+                    <p class="mc-hero__lead">
+
+                        Ikuti berita pemerintah,
+                        pelayanan publik, kegiatan daerah,
+                        dan informasi yang berkaitan
+                        dengan masyarakat Kabupaten
+                        Hulu Sungai Tengah.
+
+                    </p>
+
+
+                    <div class="gov-home-actions">
+
+                        <a
+                            href="<%= baseUrl %>/berita"
+                            class="mc-btn-primary"
+                        >
+                            Lihat Semua Berita
+
+                            <span aria-hidden="true">
+                                →
+                            </span>
+                        </a>
+
+
+                        <a
+                            href="<%= baseUrl %>/tentang"
+                            class="gov-home-link"
+                        >
+                            Tentang Media Center
+                        </a>
+
+                    </div>
+
+
+                    <ul class="mc-hero__points">
+                        <li>Informasi resmi</li>
+                        <li>Publikasi terbaru</li>
+                        <li>Arsip terbuka</li>
+                    </ul>
+
+                </div>
+
+
+                <aside class="mc-hero__panel" aria-label="Akses cepat">
+
+                    <span class="mc-hero__badge">
+                        <span class="mc-hero__dot" aria-hidden="true"></span>
+                        Kanal Resmi
+                    </span>
+
+
+                    <p class="mc-hero__panel-title">
+                        Akses cepat informasi daerah
+                    </p>
+
+
+                    <nav class="mc-hero__links" aria-label="Akses cepat informasi">
+
+                        <a href="<%= baseUrl %>/berita">
+                            <span>
+                                <strong>Berita terbaru</strong>
+                                <small>Publikasi dan agenda daerah</small>
+                            </span>
+                            <b aria-hidden="true">→</b>
+                        </a>
+
+
+                        <a href="<%= baseUrl %>/tentang">
+                            <span>
+                                <strong>Profil Media Center</strong>
+                                <small>Peran dan layanan informasi</small>
+                            </span>
+                            <b aria-hidden="true">→</b>
+                        </a>
+
+
+                        <a
+                            href="<%= homePortalUrl %>"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <span>
+                                <strong>Portal Pemerintah HST</strong>
+                                <small>Layanan resmi pemerintah daerah</small>
+                            </span>
+                            <b aria-hidden="true">↗</b>
+                        </a>
+
+                    </nav>
+
+                </aside>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         BERITA UTAMA
+    ====================================================== -->
+
+    <section class="gov-home-section">
+
+        <div class="gov-home-shell">
+
+
+            <div class="gov-home-section-head">
+
+                <div>
+
+                    <p class="gov-home-kicker">
+                        Sorotan
+                    </p>
+
+                    <h2>
+                        Berita Utama
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    Informasi pilihan terbaru dari
+                    Pemerintah Kabupaten Hulu Sungai Tengah.
+                </p>
+
+            </div>
+
+
+
+            <% if (utama) { %>
+
+
+                <% const utamaUrl = detailUrl(utama.slug), utamaImg = gambarUrl(utama.gambar) %>
+
+
+                <article class="gov-home-featured">
+
+
+                    <!-- IMAGE -->
+
+                    <a
+                        href="<%= utamaUrl %>"
+                        class="gov-home-featured-media"
+                        aria-label="<%= utama.judul %>"
+                    >
+
+
+                        <% if (utamaImg) { %>
+
+                            <img
+                                src="<%= utamaImg %>"
+                                alt="<%= utama.judul %>"
+                                width="900"
+                                height="620"
+                                fetchpriority="high"
+                                decoding="async"
+                            >
+
+                        <% } else { %>
+
+                            <%- placeholderHome %>
+
+                        <% } %>
+
+
+                    </a>
+
+
+
+                    <!-- CONTENT -->
+
+                    <div class="gov-home-featured-content">
+
+
+                        <div class="gov-home-meta">
+
+
+                            <% if (utama.kategori) { %>
+
+                                <span>
+                                    <%= utama.kategori %>
+                                </span>
+
+                            <% } %>
+
+
+                            <time
+                                datetime="<%= dateSql(utama.tanggal) %>"
+                            >
+                                <%= tanggalBerita(utama.tanggal) %>
+                            </time>
+
+
+                        </div>
+
+
+                        <h2>
+
+                            <a
+                                href="<%= utamaUrl %>"
+                            >
+                                <%= utama.judul %>
+                            </a>
+
+                        </h2>
+
+
+                        <p>
+
+                            <%= excerpt(utama.isi,250) %>
+
+                        </p>
+
+
+                        <a
+                            href="<%= utamaUrl %>"
+                            class="gov-home-read"
+                        >
+                            Baca Berita Selengkapnya
+
+                            <span aria-hidden="true">
+                                →
+                            </span>
+                        </a>
+
+
+                    </div>
+
+
+                </article>
+
+
+            <% } else { %>
+
+
+                <div class="mc-empty">
+
+                    <strong>
+                        Belum ada berita
+                    </strong>
+
+                    <p>
+                        Informasi terbaru akan ditampilkan
+                        pada bagian ini setelah diterbitkan.
+                    </p>
+
+                </div>
+
+
+            <% } %>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         INFORMASI TERBARU
+    ====================================================== -->
+
+    <section class="gov-home-section is-soft">
+
+        <div class="gov-home-shell">
+
+
+            <div class="gov-home-section-head">
+
+                <div>
+
+                    <p class="gov-home-kicker">
+                        Publikasi Terbaru
+                    </p>
+
+                    <h2>
+                        Informasi Daerah
+                    </h2>
+
+                </div>
+
+
+                <a
+                    href="/mediacenter-demo/berita"
+                    class="gov-home-link"
+                >
+                    Lihat seluruh arsip
+                    <span>→</span>
+                </a>
+
+            </div>
+
+
+
+            <% if (updates.length) { %>
+
+
+                <div class="gov-home-news-grid">
+
+
+                    <% for (const row of updates) { %>
+
+
+                        <% const url=detailUrl(row.slug),img=gambarUrl(row.gambar) %>
+
+
+                        <article class="gov-home-card">
+
+
+                            <a
+                                href="<%= url %>"
+                                class="gov-home-card-media"
+                                aria-label="<%= row.judul %>"
+                            >
+
+
+                                <% if (img) { %>
+
+                                    <img
+                                        src="<%= img %>"
+                                        alt="<%= row.judul %>"
+                                        width="640"
+                                        height="400"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+
+                                <% } else { %>
+
+                                    <%- placeholderHome %>
+
+                                <% } %>
+
+
+                            </a>
+
+
+
+                            <div class="gov-home-card-body">
+
+
+                                <div class="gov-home-meta">
+
+
+                                    <% if (row.kategori) { %>
+
+                                        <span>
+                                            <%= row.kategori %>
+                                        </span>
+
+                                    <% } %>
+
+
+                                    <time
+                                        datetime="<%= dateSql(row.tanggal) %>"
+                                    >
+                                        <%= tanggalBerita(row.tanggal) %>
+                                    </time>
+
+
+                                </div>
+
+
+                                <h3>
+
+                                    <a
+                                        href="<%= url %>"
+                                    >
+                                        <%= row.judul %>
+                                    </a>
+
+                                </h3>
+
+
+                                <p>
+
+                                    <%= excerpt(row.isi,125) %>
+
+                                </p>
+
+
+                                <a
+                                    href="<%= url %>"
+                                    class="gov-home-card-link"
+                                >
+                                    Baca informasi
+                                    <span>→</span>
+                                </a>
+
+
+                            </div>
+
+
+                        </article>
+
+
+                    <% } %>
+
+
+                </div>
+
+
+            <% } else { %>
+
+
+                <div class="mc-empty">
+
+                    Belum ada informasi terbaru.
+
+                </div>
+
+
+            <% } %>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         AKSES INFORMASI
+    ====================================================== -->
+
+    <section class="gov-home-section">
+
+        <div class="gov-home-shell">
+
+
+            <div class="gov-home-access-layout">
+
+
+                <div class="gov-home-access-copy">
+
+                    <p class="gov-home-kicker">
+                        Akses Informasi
+                    </p>
+
+
+                    <h2>
+                        Temukan informasi sesuai kebutuhan
+                    </h2>
+
+
+                    <p>
+
+                        Gunakan kategori untuk menuju
+                        publikasi pemerintah yang relevan
+                        dengan kebutuhan Anda.
+
+                    </p>
+
+
+                    <a
+                        href="/mediacenter-demo/berita"
+                        class="gov-home-link"
+                    >
+                        Buka Pusat Arsip
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+
+
+                <div class="gov-home-access-list">
+
+
+                    <a
+                        href="/mediacenter-demo/berita?kategori=Pemerintahan"
+                    >
+
+                        <span>
+                            01
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Pemerintahan
+                            </strong>
+
+                            <p>
+                                Program, agenda,
+                                kebijakan, dan kegiatan daerah.
+                            </p>
+
+                        </div>
+
+                        <b aria-hidden="true">
+                            →
+                        </b>
+
+                    </a>
+
+
+
+                    <a
+                        href="/mediacenter-demo/berita?kategori=Pelayanan%20Publik"
+                    >
+
+                        <span>
+                            02
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Pelayanan Publik
+                            </strong>
+
+                            <p>
+                                Informasi layanan pemerintah
+                                untuk masyarakat.
+                            </p>
+
+                        </div>
+
+                        <b aria-hidden="true">
+                            →
+                        </b>
+
+                    </a>
+
+
+
+                    <a
+                        href="/mediacenter-demo/berita?kategori=Pendidikan"
+                    >
+
+                        <span>
+                            03
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Pendidikan
+                            </strong>
+
+                            <p>
+                                Informasi perkembangan
+                                dan kegiatan pendidikan.
+                            </p>
+
+                        </div>
+
+                        <b aria-hidden="true">
+                            →
+                        </b>
+
+                    </a>
+
+
+
+                    <a
+                        href="/mediacenter-demo/berita?kategori=Sosial"
+                    >
+
+                        <span>
+                            04
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Sosial dan Kemasyarakatan
+                            </strong>
+
+                            <p>
+                                Program sosial dan kegiatan
+                                masyarakat daerah.
+                            </p>
+
+                        </div>
+
+                        <b aria-hidden="true">
+                            →
+                        </b>
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+</main>
+
+
+<%- include('../partials/footer') %>

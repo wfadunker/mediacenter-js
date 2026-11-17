@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+!.env.example
+/data/db.json
+/data/db.json.tmp
+/database/seed-data.sql
+*.zip
+*.log
+.vercel/
+.DS_Store

@@ -1,0 +1,137 @@
+
+
+<header class="mc-app-brand">
+
+    <!-- IDENTITAS PEMERINTAH -->
+    <div class="mc-brand-left">
+
+        <img
+            src="/mediacenter-demo/assets/img/logo-hst.png"
+            alt="Logo Kabupaten Hulu Sungai Tengah"
+            class="mc-brand-logo"
+            width="50"
+            height="50"
+            decoding="async"
+        >
+
+        <div class="mc-brand-text">
+
+            <span>
+                Pemerintah Kabupaten
+            </span>
+
+            <strong>
+                Hulu Sungai Tengah
+            </strong>
+
+            <em>
+                Media Center
+            </em>
+
+        </div>
+
+    </div>
+
+
+    <!-- TANGGAL DAN JAM -->
+    <div class="mc-brand-time">
+
+        <span>
+            <%= tanggalFull %>
+        </span>
+
+        <strong
+            class="js-mc-clock"
+        >
+            <%= jamFull %>
+        </strong>
+
+    </div>
+
+</header>
+
+
+<script>
+(() => {
+
+    const clock =
+        document.querySelector(
+            '.js-mc-clock'
+        );
+
+    if (!clock) {
+        return;
+    }
+
+    const formatter =
+        new Intl.DateTimeFormat(
+            'id-ID',
+            {
+                timeZone:
+                    'Asia/Makassar',
+
+                hour:
+                    '2-digit',
+
+                minute:
+                    '2-digit',
+
+                second:
+                    '2-digit',
+
+                hour12:
+                    false
+            }
+        );
+
+    const updateClock = () => {
+
+        const parts =
+            formatter.formatToParts(
+                new Date()
+            );
+
+        let hour = '';
+        let minute = '';
+        let second = '';
+
+        for (
+            const part of parts
+        ) {
+
+            if (
+                part.type === 'hour'
+            ) {
+                hour =
+                    part.value;
+            }
+
+            if (
+                part.type === 'minute'
+            ) {
+                minute =
+                    part.value;
+            }
+
+            if (
+                part.type === 'second'
+            ) {
+                second =
+                    part.value;
+            }
+
+        }
+
+        clock.textContent =
+            `${hour}.${minute}.${second} WITA`;
+    };
+
+    updateClock();
+
+    window.setInterval(
+        updateClock,
+        1000
+    );
+
+})();
+</script>

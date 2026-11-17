@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title>Tambah Berita - Media Center HST</title>
+    <link rel="icon" type="image/png" href="<%= baseUrl %>/assets/img/favicon-hst.png">
+    <link rel="stylesheet" href="<%= baseUrl %>/assets/css/admin.css?v=211">
+</head>
+<body class="admin-page" data-session-idle-at="<%= sessionIdleAt %>" data-session-max-at="<%= sessionMaxAt %>" data-session-login="<%= adminBase %>">
+<a class="skip-link" href="#admin-main">Lewati ke konten utama</a>
+
+<div class="admin-layout">
+    <%- include('../partials/sidebar') %>
+
+    <div class="admin-main">
+        <%- include('../partials/admin-topbar') %>
+
+        <main id="admin-main" class="admin-content" tabindex="-1">
+            <section class="page-heading">
+                <div>
+                    <p class="eyebrow">Pengelolaan Berita</p>
+                    <h1>Tambah Berita</h1>
+                    <p>Tambahkan informasi baru untuk ditampilkan pada website publik.</p>
+                </div>
+                <div class="page-heading__actions">
+                    <a class="btn" href="<%= adminBase %>/berita">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+                        Kembali
+                    </a>
+                </div>
+            </section>
+
+            <% if (errors.length) { %>
+                <div class="alert alert--error" role="alert">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+                    <div>
+                        <strong>Data belum dapat disimpan.</strong>
+                        <ul class="alert__list"><% for (const error of errors) { %><li><%= error %></li><% } %></ul>
+                    </div>
+                </div>
+            <% } %>
+
+            <form method="post" enctype="multipart/form-data" class="editor-grid" data-editor-form>
+                <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+
+                <div class="editor-main">
+                    <section class="panel">
+                        <div class="panel__head">
+                            <div>
+                                <h2 class="panel__title">Isi Berita</h2>
+                                <p class="panel__desc">Tulis judul dan isi informasi yang akan dipublikasikan.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="judul">Judul Berita <span class="required">*</span></label>
+                            <input id="judul" type="text" name="judul" value="<%= data.judul %>" required autofocus minlength="3" maxlength="255" class="form-control" placeholder="Contoh: Pemerintah HST luncurkan program layanan publik baru">
+                            <p class="form-help">Gunakan judul yang jelas, ringkas, dan sesuai dengan isi berita.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="isi">Isi Berita <span class="required">*</span></label>
+                            <textarea id="isi" name="isi" required minlength="10" maxlength="100000" rows="14" class="form-control" placeholder="Tuliskan isi berita lengkap di sini..."><%= data.isi %></textarea>
+                            <p class="form-help">Tekan Enter untuk membuat paragraf baru. Hindari menyalin format dari aplikasi lain.</p>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel__head">
+                            <div>
+                                <h2 class="panel__title">Informasi Publikasi</h2>
+                                <p class="panel__desc">Lengkapi metadata pendukung agar berita mudah ditemukan.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="kategori">Kategori <span class="required">*</span></label>
+                                <input id="kategori" type="text" name="kategori" list="kategori-list" value="<%= data.kategori %>" required maxlength="100" class="form-control" placeholder="Pilih atau tulis kategori">
+                                <datalist id="kategori-list">
+                                    <option value="Pemerintahan">
+                                    <option value="Pelayanan Publik">
+                                    <option value="Pendidikan">
+                                    <option value="Sosial">
+                                    <option value="Keagamaan">
+                                    <option value="Informasi">
+                                    <option value="Komunikasi">
+                                    <option value="Teknologi">
+                                    <option value="Agenda">
+                                </datalist>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="tanggal">Tanggal Publikasi <span class="required">*</span></label>
+                                <input id="tanggal" type="date" name="tanggal" value="<%= data.tanggal %>" max="<%= todayIso() %>" required class="form-control">
+                                <p class="form-help">Tanggal mengikuti zona waktu WITA dan tidak boleh melewati hari ini.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="penulis">Penulis</label>
+                                <input id="penulis" type="text" name="penulis" value="<%= data.penulis %>" maxlength="150" class="form-control" placeholder="Media Center HST">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="sumber">Sumber</label>
+                                <input id="sumber" type="text" name="sumber" value="<%= data.sumber %>" maxlength="255" class="form-control" placeholder="Diskominfo HST">
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="editor-side">
+                    <section class="panel">
+                        <div class="panel__head">
+                            <div>
+                                <h2 class="panel__title">Gambar Utama</h2>
+                                <p class="panel__desc">Opsional. Gunakan gambar yang relevan.</p>
+                            </div>
+                        </div>
+
+                        <div class="image-mode" role="radiogroup" aria-label="Sumber gambar">
+                            <label>
+                                <input type="radio" name="sumber_gambar" value="upload" <%= data.sumber_gambar!=='url'?'checked':'' %> data-image-mode="upload">
+                                <span>Unggah file</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="sumber_gambar" value="url" <%= data.sumber_gambar==='url'?'checked':'' %> data-image-mode="url">
+                                <span>Tautan (URL)</span>
+                            </label>
+                        </div>
+
+                        <div data-image-pane="upload">
+                            <div class="image-preview" data-image-preview>
+                                <span class="image-empty" data-image-empty>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.5"/><path d="m5 17 4-4 3 3 2-2 5 5"/></svg>
+                                    Belum ada gambar
+                                </span>
+                                <img src="" alt="Pratinjau gambar berita" data-image-preview-img hidden>
+                            </div>
+
+                            <input id="gambar" type="file" name="gambar" accept=".jpg,.jpeg,.png,.webp" class="file-input" data-image-input>
+                            <p class="form-help">JPG, PNG, atau WebP. Maksimal 2 MB.</p>
+                        </div>
+
+                        <div data-image-pane="url" hidden>
+                            <label class="form-label" for="gambar_url">URL gambar</label>
+                            <div class="image-url-row">
+                                <input id="gambar_url" type="url" name="gambar_url" value="<%= data.gambar_url||'' %>" class="form-control" maxlength="2048" inputmode="url" spellcheck="false" placeholder="https://contoh.go.id/foto-kegiatan.jpg">
+                                <button type="button" class="btn btn--sm" data-image-url-check="<%= adminBase %>/gambar-pratinjau">Periksa</button>
+                            </div>
+                            <div class="image-preview image-preview--url" data-image-url-box hidden>
+                                <img src="" alt="Pratinjau gambar dari tautan" data-image-url-preview>
+                            </div>
+                            <p class="image-url-msg" data-image-url-msg hidden></p>
+                            <p class="form-help">Gambar akan diunduh dan disimpan ke server. JPG, PNG, atau WebP, maksimal 2 MB.</p>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel__head">
+                            <div>
+                                <h2 class="panel__title">Publikasi</h2>
+                                <p class="panel__desc">Periksa kembali sebelum menerbitkan.</p>
+                            </div>
+                        </div>
+
+                        <div class="meta-list">
+                            <div class="meta-row"><span>Status</span><strong class="pill">Berita Baru</strong></div>
+                            <div class="meta-row"><span>Zona waktu</span><strong>WITA</strong></div>
+                            <div class="meta-row"><span>Akses</span><strong>Publik</strong></div>
+                        </div>
+
+                        <button type="submit" class="btn btn--primary btn--block" data-submit>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+                            Publikasikan Berita
+                        </button>
+                    </section>
+                </aside>
+            </form>
+        </main>
+    </div>
+</div>
+
+<script src="<%= baseUrl %>/assets/js/admin.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const os=require('node:os');
+const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'mediacenter-test-'));
+process.env.DB_MODE='json';
+process.env.JSON_DB_FILE=path.join(tmp,'db.json');
+const store=require('../lib/repository');
+const h=require('../lib/helpers');
+test('helpers: slug, URL, format dan escape',()=>{
+  assert.equal(h.slugify('Berita : Pemerintah Daerah!'),'berita-pemerintah-daerah');
+  assert.equal(h.gambarUrl('../private.txt'),'');
+  assert.equal(h.escapeHtml('<script>'), '&lt;script&gt;');
+  assert.equal(h.excerpt('<p>Berita penting</p>'), 'Berita penting');
+  assert.equal(h.excerpt('<p>Berita penting</p>', 6), 'Berita...');
+  assert.match(h.detailUrl('contoh'),/detail\?slug=contoh$/);
+  assert.match(h.tanggalBerita('2026-10-11'),/2026/);
+});
+test('repository JSON: berita, pencarian, slug unik, edit dan hapus',async()=>{
+ const sample={judul:'Festival HST',isi:'Isi berita',kategori:'Pendidikan',tanggal:'2026-10-11',penulis:'Tim',sumber:'HST',gambar:null};
+ const id=await store.createNews(sample);
+ const id2=await store.createNews(sample);
+ assert.equal((await store.getById(id)).slug,'festival-hst');
+ assert.equal((await store.getById(id2)).slug,'festival-hst-2');
+ assert.equal((await store.listNews({q:'festival'})).total,2);
+ assert.equal((await store.categories()).length,1);
+ assert.equal((await store.stats()).totalBerita,2);
+ await store.updateNews(id,{...sample,judul:'Informasi Baru'});
+ assert.equal((await store.getById(id)).slug,'informasi-baru');
+ await store.deleteNews(id2);
+ assert.equal((await store.listNews({})).total,1);
+});
+test('repository JSON: user',async()=>{
+ await store.createUser('example','hash');
+ assert.equal((await store.getUser('example')).password,'hash');
+ assert.equal(store.mode,'json');
+ assert.equal(typeof store.getSettings,'undefined');
+ assert.equal(typeof store.saveSettings,'undefined');
+});
+process.on('exit',()=>fs.rmSync(tmp,{recursive:true,force:true}));

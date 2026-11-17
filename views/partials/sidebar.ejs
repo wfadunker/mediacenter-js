@@ -1,0 +1,57 @@
+<aside class="sidebar" id="admin-sidebar" data-sidebar aria-label="Navigasi administrator">
+    <div class="sidebar__head">
+        <a class="sidebar__brand" href="<%= adminBase %>" aria-label="Dashboard Media Center HST">
+            <img src="<%= baseUrl %>/assets/img/logo-hst.png" alt="Logo Kabupaten Hulu Sungai Tengah" width="38" height="46">
+            <span class="sidebar__brand-text">
+                <span>Pemerintah Kabupaten</span>
+                <strong>Media Center HST</strong>
+            </span>
+        </a>
+        <button type="button" class="sidebar__collapse" data-sidebar-collapse aria-label="Perkecil sidebar" title="Perkecil sidebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Menu utama">
+        <span class="sidebar__label">Utama</span>
+        <a class="nav-item <%= adminPage==='dashboard'?'is-active':'' %>" href="<%= adminBase %>" <% if (adminPage==='dashboard') { %>aria-current="page"<% } %>>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span>Dashboard</span>
+        </a>
+
+        <span class="sidebar__label">Konten</span>
+        <a class="nav-item <%= adminPage==='berita'||adminPage==='edit'?'is-active':'' %>" href="<%= adminBase %>/berita" <% if (adminPage==='berita'||adminPage==='edit') { %>aria-current="page"<% } %>>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h10l4 4v12H5z"/><path d="M15 4v5h4"/><path d="M8 13h8M8 16h6"/></svg>
+            <span>Kelola Berita</span>
+        </a>
+        <a class="nav-item <%= adminPage==='tambah'?'is-active':'' %>" href="<%= adminBase %>/berita/tambah" <% if (adminPage==='tambah') { %>aria-current="page"<% } %>>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Tambah Berita</span>
+        </a>
+
+        <span class="sidebar__label">Lainnya</span>
+        <a class="nav-item" href="<%= baseUrl %>/" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3 3 3 15 0 18"/></svg>
+            <span>Website Publik</span>
+            <svg class="nav-item__external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+        </a>
+    </nav>
+
+    <div class="sidebar__foot">
+        <div class="sidebar__user">
+            <span class="avatar" aria-hidden="true"><%= initial %></span>
+            <span class="sidebar__user-text">
+                <strong><%= username %></strong>
+                <span>Administrator</span>
+            </span>
+        </div>
+        <form method="post" action="<%= adminBase %>/logout">
+            <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+            <button type="submit" class="nav-item nav-item--danger">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+                <span>Keluar</span>
+            </button>
+        </form>
+    </div>
+</aside>
+<div class="admin-overlay" data-sidebar-overlay hidden></div>

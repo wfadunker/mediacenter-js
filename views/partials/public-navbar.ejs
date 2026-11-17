@@ -176,10 +176,8 @@
       setShrunk(false);
     } else if (holdOpen) {
       setShrunk(false);
-    } else if (delta > 2 || (delta === 0 && y > 120)) {
+    } else if (Math.abs(delta) > 2 || (delta === 0 && y > 120)) {
       setShrunk(true);
-    } else if (delta < -2) {
-      setShrunk(false);
     }
   };
 

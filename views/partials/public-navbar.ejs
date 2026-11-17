@@ -88,6 +88,21 @@
     </div>
 
   </div>
+
+  <button
+    type="button"
+    class="mc-navbar__mini"
+    aria-label="Perluas navigasi"
+    aria-expanded="false"
+  >
+    <img
+      src="<%= baseUrl %>/assets/img/logo-hst.png"
+      alt=""
+      width="34"
+      height="34"
+      decoding="async"
+    >
+  </button>
 </header>
 
 <script>
@@ -128,51 +143,44 @@
   const navbar = document.querySelector('.mc-navbar');
   if (!navbar) return;
 
-  const mobile = window.matchMedia('(max-width: 760px)');
+  const mini = navbar.querySelector('.mc-navbar__mini');
   const currentY = () =>
     Math.max(0, window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0);
 
   let shrunk = navbar.classList.contains('is-shrunk');
-  let hidden = false;
+  let holdOpen = false;
   let lastY = currentY();
   let ticking = false;
 
-  const setHidden = (value) => {
-    if (hidden === value) return;
-    hidden = value;
-    navbar.classList.toggle('is-nav-hidden', value);
+  const syncAria = () => {
+    if (mini) mini.setAttribute('aria-expanded', String(!shrunk));
+  };
+
+  const setShrunk = (value) => {
+    if (shrunk === value) return;
+    shrunk = value;
+    navbar.classList.toggle('is-shrunk', value);
+    syncAria();
   };
 
   const update = () => {
     ticking = false;
     const y = currentY();
-
-    if (mobile.matches) {
-      if (shrunk) {
-        shrunk = false;
-        navbar.classList.remove('is-shrunk');
-      }
-
-      if (y <= 64) {
-        setHidden(false);
-      } else if (y > lastY + 4) {
-        setHidden(true);
-      } else if (y < lastY - 4) {
-        setHidden(false);
-      }
-    } else {
-      setHidden(false);
-
-      if (!shrunk && y > 32) {
-        shrunk = true;
-        navbar.classList.add('is-shrunk');
-      } else if (shrunk && y < 12) {
-        shrunk = false;
-        navbar.classList.remove('is-shrunk');
-      }
-    }
-
+    const delta = y - lastY;
     lastY = y;
+
+    if (holdOpen && Math.abs(delta) > 6) holdOpen = false;
+
+    if (y <= 24) {
+      holdOpen = false;
+      setShrunk(false);
+    } else if (holdOpen) {
+      setShrunk(false);
+    } else if (delta > 2 || (delta === 0 && y > 120)) {
+      setShrunk(true);
+    } else if (delta < -2) {
+      setShrunk(false);
+    }
   };
 
   const onScroll = () => {
@@ -181,9 +189,16 @@
     window.requestAnimationFrame(update);
   };
 
+  if (mini) {
+    mini.addEventListener('click', () => {
+      holdOpen = true;
+      setShrunk(false);
+    });
+  }
+
+  syncAria();
   update();
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
-  if (mobile.addEventListener) mobile.addEventListener('change', onScroll);
 })();
 </script>

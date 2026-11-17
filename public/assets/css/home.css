@@ -7124,7 +7124,7 @@ body.mc-site {
     z-index: 900;
     width: min(1240px, calc(100% - 32px));
     margin: 16px auto 22px;
-    animation: mcSlideDown .5s var(--mc-ease) both;
+    animation: mcSlideDown .5s var(--mc-ease) backwards;
     transition: top .35s var(--mc-ease);
 }
 
@@ -7492,6 +7492,22 @@ body.mc-site {
         top: 10px;
         width: calc(100% - 20px);
         margin: 12px auto 18px;
+        transition:
+            transform .2s var(--mc-ease),
+            opacity .2s var(--mc-ease),
+            visibility 0s linear;
+        will-change: transform, opacity;
+    }
+
+    .mc-navbar.is-nav-hidden {
+        visibility: hidden;
+        opacity: 0;
+        transform: translate3d(0, -140%, 0);
+        pointer-events: none;
+        transition:
+            transform .2s var(--mc-ease),
+            opacity .2s var(--mc-ease),
+            visibility 0s linear .2s;
     }
 
     .mc-navbar__inner {
@@ -7501,6 +7517,13 @@ body.mc-site {
             "nav nav nav"
             "search search search";
         border-radius: 24px;
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, .98),
+            rgba(255, 255, 255, .95)
+        );
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
     }
 
     .mc-navbar__brandtext span {
@@ -7547,6 +7570,12 @@ body.mc-site {
 
     .mc-navbar__menu a {
         padding: 0 10px;
+    }
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: reduce) {
+    .mc-navbar {
+        transition: none;
     }
 }
 

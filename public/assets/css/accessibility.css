@@ -488,17 +488,27 @@ html[data-theme="dark"] .a11y-theme-round {
     outline-offset: 3px !important;
 }
 
-html[data-a11y-text-size="large"] {
-    font-size: 112.5%;
+/* Ukuran teks memakai zoom karena halaman memakai satuan px, bukan rem. */
+html[data-a11y-text-size] body {
+    zoom: 1;
 }
 
-html[data-a11y-text-size="larger"] {
-    font-size: 125%;
+html[data-a11y-text-size="large"] body {
+    zoom: 1.125;
 }
 
-html[data-a11y-text-size="largest"] {
-    font-size: 137.5%;
+html[data-a11y-text-size="larger"] body {
+    zoom: 1.25;
 }
+
+html[data-a11y-text-size="largest"] body {
+    zoom: 1.375;
+}
+
+/* Panel aksesibilitas tetap berukuran normal agar selalu terjangkau. */
+html[data-a11y-text-size="large"] .a11y-dock { zoom: 0.8889; }
+html[data-a11y-text-size="larger"] .a11y-dock { zoom: 0.8; }
+html[data-a11y-text-size="largest"] .a11y-dock { zoom: 0.7273; }
 
 html[data-a11y-underline="on"] a {
     text-decoration: underline !important;
@@ -632,9 +642,6 @@ html[data-theme="dark"] .a11y-widget { color-scheme: dark; }
     outline-offset: 3px;
 }
 button, input, select, textarea { font: inherit; }
-html[data-a11y-text-size="large"] { font-size: 112.5%; }
-html[data-a11y-text-size="larger"] { font-size: 125%; }
-html[data-a11y-text-size="largest"] { font-size: 137.5%; }
 html[data-a11y-contrast="high"] body { filter: contrast(1.16); }
 html[data-a11y-underline="on"] a { text-decoration: underline !important; text-underline-offset: .18em; }
 @media (max-width: 480px) {

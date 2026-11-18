@@ -42,8 +42,14 @@
             aria-describedby="a11y-desc"
             hidden
         >
-            <div class="a11y-panel__head">
-                <div>
+            <header class="a11y-panel__head">
+                <span class="a11y-panel__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false">
+                        <circle cx="12" cy="4.6" r="1.6"></circle>
+                        <path d="M5 9.4h14M12 9.4v5.4M8.4 19.4 12 14l3.6 5.4"></path>
+                    </svg>
+                </span>
+                <div class="a11y-panel__heading">
                     <h2 class="a11y-panel__title" id="a11y-title">Aksesibilitas</h2>
                     <p class="a11y-panel__desc" id="a11y-desc">
                         Sesuaikan tampilan situs sesuai kebutuhan Anda.
@@ -54,136 +60,223 @@
                     type="button"
                     data-a11y-close
                     aria-label="Tutup pengaturan aksesibilitas"
-                >×</button>
+                >
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M6 6 18 18M18 6 6 18"></path>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="a11y-tabs" role="tablist" aria-label="Bagian pengaturan aksesibilitas">
+                <button
+                    class="a11y-tab"
+                    type="button"
+                    role="tab"
+                    id="a11y-tab-view"
+                    aria-controls="a11y-panel-view"
+                    aria-selected="true"
+                    data-a11y-tab="view"
+                >Tampilan</button>
+                <button
+                    class="a11y-tab"
+                    type="button"
+                    role="tab"
+                    id="a11y-tab-read"
+                    aria-controls="a11y-panel-read"
+                    aria-selected="false"
+                    tabindex="-1"
+                    data-a11y-tab="read"
+                >Membaca</button>
+                <button
+                    class="a11y-tab"
+                    type="button"
+                    role="tab"
+                    id="a11y-tab-speak"
+                    aria-controls="a11y-panel-speak"
+                    aria-selected="false"
+                    tabindex="-1"
+                    data-a11y-tab="speak"
+                >Suara</button>
             </div>
 
-            <div class="a11y-section">
-                <div class="a11y-section__head">
-                    <h3 class="a11y-section__title">Ukuran teks</h3>
-                    <span class="a11y-size-badge" data-a11y-size-label>100%</span>
+            <div class="a11y-panel__body">
+
+                <div
+                    class="a11y-tabpanel"
+                    id="a11y-panel-view"
+                    role="tabpanel"
+                    aria-labelledby="a11y-tab-view"
+                    data-a11y-tabpanel="view"
+                >
+                    <div class="a11y-section">
+                        <div class="a11y-section__head">
+                            <h3 class="a11y-section__title">Ukuran teks</h3>
+                            <span class="a11y-size-badge" data-a11y-size-label>100%</span>
+                        </div>
+                        <div class="a11y-seg" role="group" aria-label="Ukuran teks">
+                            <button type="button" data-a11y-action="text-smaller" aria-label="Perkecil ukuran teks">
+                                <span aria-hidden="true">A−</span>
+                            </button>
+                            <button type="button" data-a11y-action="text-reset">Normal</button>
+                            <button type="button" data-a11y-action="text-larger" aria-label="Perbesar ukuran teks">
+                                <span aria-hidden="true">A+</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="a11y-section">
+                        <h3 class="a11y-section__title">Kontras &amp; warna</h3>
+                        <div class="a11y-switch-list">
+                            <button class="a11y-switch" type="button" data-a11y-action="contrast" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Kontras tinggi</strong>
+                                    <small>Pertegas warna teks dan latar.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                            <button class="a11y-switch" type="button" data-a11y-action="grayscale" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Warna satu nada</strong>
+                                    <small>Tampilan hitam putih.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                            <button class="a11y-switch" type="button" data-a11y-action="underline" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Garis bawah tautan</strong>
+                                    <small>Mudah mengenali setiap tautan.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="a11y-section">
+                        <h3 class="a11y-section__title">Gerakan &amp; kursor</h3>
+                        <div class="a11y-switch-list">
+                            <button class="a11y-switch" type="button" data-a11y-action="cursor" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Kursor besar</strong>
+                                    <small>Perbesar penunjuk mouse.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                            <button class="a11y-switch" type="button" data-a11y-action="motion" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Kurangi animasi</strong>
+                                    <small>Hentikan gerakan yang mengganggu.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="a11y-text-controls">
-                    <button type="button" data-a11y-action="text-smaller" aria-label="Perkecil ukuran teks">A−</button>
-                    <button type="button" data-a11y-action="text-reset">Normal</button>
-                    <button type="button" data-a11y-action="text-larger" aria-label="Perbesar ukuran teks">A+</button>
+
+                <div
+                    class="a11y-tabpanel"
+                    id="a11y-panel-read"
+                    role="tabpanel"
+                    aria-labelledby="a11y-tab-read"
+                    data-a11y-tabpanel="read"
+                    hidden
+                >
+                    <div class="a11y-section">
+                        <h3 class="a11y-section__title">Penyesuaian teks</h3>
+                        <div class="a11y-switch-list">
+                            <button class="a11y-switch" type="button" data-a11y-action="font" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Font ramah disleksia</strong>
+                                    <small>Huruf mudah dibedakan.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                            <button class="a11y-switch" type="button" data-a11y-action="spacing" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Spasi teks</strong>
+                                    <small>Renggangkan huruf dan baris.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="a11y-section">
+                        <h3 class="a11y-section__title">Fokus membaca</h3>
+                        <div class="a11y-switch-list">
+                            <button class="a11y-switch" type="button" data-a11y-action="images" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Sembunyikan gambar</strong>
+                                    <small>Fokus membaca teks saja.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                            <button class="a11y-switch" type="button" data-a11y-action="mask" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Kaca baca</strong>
+                                    <small>Sorot baris teks mengikuti kursor.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                        <p class="a11y-tts-note">Kaca baca membantu Anda tetap fokus pada satu baris teks.</p>
+                    </div>
                 </div>
+
+                <div
+                    class="a11y-tabpanel"
+                    id="a11y-panel-speak"
+                    role="tabpanel"
+                    aria-labelledby="a11y-tab-speak"
+                    data-a11y-tabpanel="speak"
+                    hidden
+                >
+                    <div class="a11y-section">
+                        <h3 class="a11y-section__title">Membacakan teks</h3>
+                        <div class="a11y-seg a11y-seg--sound" role="group" aria-label="Kontrol pembacaan">
+                            <button type="button" data-a11y-action="tts-read" aria-label="Bacakan isi halaman">
+                                <span aria-hidden="true">▶</span> Baca
+                            </button>
+                            <button type="button" data-a11y-action="tts-pause" aria-label="Jeda atau lanjutkan pembacaan">
+                                <span aria-hidden="true">⏸</span> <span data-a11y-tts-pause-label>Jeda</span>
+                            </button>
+                            <button type="button" data-a11y-action="tts-stop" aria-label="Hentikan pembacaan">
+                                <span aria-hidden="true">⏹</span> Stop
+                            </button>
+                        </div>
+                        <div class="a11y-tts-rate" role="group" aria-label="Kecepatan pembacaan">
+                            <button type="button" data-a11y-rate="0.85" aria-pressed="false">Lambat</button>
+                            <button type="button" data-a11y-rate="1" aria-pressed="true">Normal</button>
+                            <button type="button" data-a11y-rate="1.25" aria-pressed="false">Cepat</button>
+                        </div>
+                        <p class="a11y-tts-note">Pilih teks terlebih dahulu untuk membacakan bagian tertentu saja.</p>
+                    </div>
+
+                    <div class="a11y-section">
+                        <h3 class="a11y-section__title">Interaksi</h3>
+                        <div class="a11y-switch-list">
+                            <button class="a11y-switch" type="button" data-a11y-action="speak-click" aria-pressed="false">
+                                <span class="a11y-switch__copy">
+                                    <strong>Baca saat diklik</strong>
+                                    <small>Klik teks apa pun untuk dibacakan.</small>
+                                </span>
+                                <span class="a11y-switch__ui" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="a11y-section">
-                <h3 class="a11y-section__title">Tampilan</h3>
-                <div class="a11y-switch-list">
-                    <button class="a11y-switch" type="button" data-a11y-action="contrast" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Kontras tinggi</strong>
-                            <small>Pertegas warna teks dan latar.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                    <button class="a11y-switch" type="button" data-a11y-action="font" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Font ramah disleksia</strong>
-                            <small>Huruf mudah dibedakan.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                    <button class="a11y-switch" type="button" data-a11y-action="grayscale" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Warna satu nada</strong>
-                            <small>Tampilan hitam putih.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                    <button class="a11y-switch" type="button" data-a11y-action="images" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Sembunyikan gambar</strong>
-                            <small>Fokus membaca teks saja.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                    <button class="a11y-switch" type="button" data-a11y-action="underline" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Garis bawah tautan</strong>
-                            <small>Mudah mengenali setiap tautan.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                    <button class="a11y-switch" type="button" data-a11y-action="spacing" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Spasi teks</strong>
-                            <small>Renggangkan huruf dan baris.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                    <button class="a11y-switch" type="button" data-a11y-action="cursor" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Kursor besar</strong>
-                            <small>Perbesar penunjuk mouse.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="a11y-section">
-                <h3 class="a11y-section__title">Membaca</h3>
-                <div class="a11y-switch-list">
-                    <button class="a11y-switch" type="button" data-a11y-action="mask" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Kaca baca</strong>
-                            <small>Sorot baris teks mengikuti kursor.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="a11y-section">
-                <h3 class="a11y-section__title">Membacakan teks</h3>
-                <div class="a11y-text-controls">
-                    <button type="button" data-a11y-action="tts-read" aria-label="Bacakan isi halaman">
-                        <span aria-hidden="true">▶</span> Baca
-                    </button>
-                    <button type="button" data-a11y-action="tts-pause" aria-label="Jeda atau lanjutkan pembacaan">
-                        <span aria-hidden="true">⏸</span> <span data-a11y-tts-pause-label>Jeda</span>
-                    </button>
-                    <button type="button" data-a11y-action="tts-stop" aria-label="Hentikan pembacaan">
-                        <span aria-hidden="true">⏹</span> Stop
-                    </button>
-                </div>
-                <div class="a11y-tts-rate" role="group" aria-label="Kecepatan pembacaan">
-                    <button type="button" data-a11y-rate="0.85" aria-pressed="false">Lambat</button>
-                    <button type="button" data-a11y-rate="1" aria-pressed="true">Normal</button>
-                    <button type="button" data-a11y-rate="1.25" aria-pressed="false">Cepat</button>
-                </div>
-                <div class="a11y-switch-list">
-                    <button class="a11y-switch" type="button" data-a11y-action="speak-click" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Baca saat diklik</strong>
-                            <small>Klik teks apa pun untuk dibacakan.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                </div>
-                <p class="a11y-tts-note">Pilih teks terlebih dahulu untuk membacakan bagian tertentu saja.</p>
-            </div>
-
-            <div class="a11y-section">
-                <h3 class="a11y-section__title">Gerakan</h3>
-                <div class="a11y-switch-list">
-                    <button class="a11y-switch" type="button" data-a11y-action="motion" aria-pressed="false">
-                        <span class="a11y-switch__copy">
-                            <strong>Kurangi animasi</strong>
-                            <small>Hentikan gerakan yang mengganggu.</small>
-                        </span>
-                        <span class="a11y-switch__ui" aria-hidden="true"></span>
-                    </button>
-                </div>
-            </div>
-
-            <button class="a11y-reset-all" type="button" data-a11y-action="reset-all">
-                Atur ulang semua pengaturan
-            </button>
-            <p class="a11y-status" data-a11y-status role="status" aria-live="polite" aria-atomic="true"></p>
+            <footer class="a11y-panel__foot">
+                <button class="a11y-reset-all" type="button" data-a11y-action="reset-all">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M4 4v6h6M20 20v-6h-6"></path>
+                        <path d="M5.6 15a7.5 7.5 0 0 0 12.9 2.4M18.4 9A7.5 7.5 0 0 0 5.5 6.6"></path>
+                    </svg>
+                    Atur ulang semua pengaturan
+                </button>
+                <p class="a11y-status" data-a11y-status role="status" aria-live="polite" aria-atomic="true"></p>
+            </footer>
         </section>
 
     </div>

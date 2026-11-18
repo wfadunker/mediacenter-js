@@ -11,6 +11,43 @@
     const closeButton = widget.querySelector('[data-a11y-close]');
     const status = widget.querySelector('[data-a11y-status]');
     const sizeLabel = widget.querySelector('[data-a11y-size-label]');
+    const tabs = Array.from(widget.querySelectorAll('[role="tab"]'));
+    const tabPanels = Array.from(widget.querySelectorAll('[data-a11y-tabpanel]'));
+
+    const activateTab = (tab, focus = false) => {
+        if (!tab) return;
+
+        tabs.forEach((item) => {
+            const selected = item === tab;
+            item.setAttribute('aria-selected', String(selected));
+            item.tabIndex = selected ? 0 : -1;
+        });
+
+        tabPanels.forEach((tabPanel) => {
+            tabPanel.hidden = tabPanel.dataset.a11yTabpanel !== tab.dataset.a11yTab;
+        });
+
+        if (focus) tab.focus();
+    };
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activateTab(tab));
+
+        tab.addEventListener('keydown', (event) => {
+            const keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'];
+            if (!keys.includes(event.key)) return;
+
+            event.preventDefault();
+
+            let nextIndex = index;
+            if (event.key === 'Home') nextIndex = 0;
+            else if (event.key === 'End') nextIndex = tabs.length - 1;
+            else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') nextIndex = (index - 1 + tabs.length) % tabs.length;
+            else nextIndex = (index + 1) % tabs.length;
+
+            activateTab(tabs[nextIndex], true);
+        });
+    });
 
     const textSizes = ['normal', 'large', 'larger', 'largest'];
     const textSizeLabels = {
